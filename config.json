@@ -55,6 +55,6 @@
     "pcControl": true,
     "postToFB": true,
     "tgApproval": true,
-    "dryRun": true
+    "dryRun": false
   }
 }

@@ -228,3 +228,89 @@
 [09:54:12 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (271 chars)
 [09:54:20 19/4/2026] [PCCtrl] 🤖 AI Action: type="screenshot" attrs=""
 [09:54:20 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\ai_request_1776567260709.png
+[09:55:54 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:55:55 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776567355256.png
+[09:55:57 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:56:06 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (150 chars)
+[09:56:38 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[09:56:39 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:56:39 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[09:56:39 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:57:38 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:57:38 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776567458447.png
+[09:57:40 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:57:45 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (118 chars)
+[09:57:53 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="""
+[09:57:53 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776567473081.png
+[09:57:53 19/4/2026] [PCCtrl] 🚀 Mở app: chrome
+[09:57:56 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776567476258.png
+[09:58:12 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[09:58:12 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:58:23 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (161 chars)
+[10:00:21 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[10:00:22 19/4/2026] [INFO] 👂 Telegram polling ON
+[10:00:22 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[10:00:22 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[10:01:56 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:01:56 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:02:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (603 chars)
+[10:03:38 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[10:03:39 19/4/2026] [INFO] 👂 Telegram polling ON
+[10:03:39 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[10:03:39 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[10:07:32 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[10:07:33 19/4/2026] [INFO] 👂 Telegram polling ON
+[10:07:33 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[10:07:33 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[10:10:27 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[10:10:27 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776568227839.png
+[10:10:30 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[10:10:33 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (173 chars)
+[10:10:36 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="https://thienlinhanfengshui.com""
+[10:10:36 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776568236871.png
+[10:10:37 19/4/2026] [PCCtrl] 🌐 Mở URL: https://thienlinhanfengshui.com [chrome]
+[10:10:45 19/4/2026] [PCCtrl] ❌ openURL thất bại: spawnSync C:\WINDOWS\system32\cmd.exe ETIMEDOUT
+[10:11:05 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:11:06 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:11:19 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (1152 chars)
+[10:11:52 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:11:53 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:12:04 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (861 chars)
+[10:12:59 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:12:59 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:13:11 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (146 chars)
+[10:14:09 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[10:14:09 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776568449642.png
+[10:14:12 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[10:14:23 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (118 chars)
+[10:14:57 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[10:14:57 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776568497418.png
+[10:14:59 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[10:15:10 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (361 chars)
+[10:15:34 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:15:34 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:15:40 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (271 chars)
+[10:15:55 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:15:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:16:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (148 chars)
+[10:16:17 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:16:18 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:16:26 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (344 chars)
+[10:18:00 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[10:18:01 19/4/2026] [INFO] 👂 Telegram polling ON
+[10:18:01 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[10:18:01 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[10:20:18 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[10:20:19 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776568819260.png
+[10:20:21 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[10:20:26 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (178 chars)
+[10:20:30 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="https://dhtcompany.com""
+[10:20:30 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776568830137.png
+[10:20:31 19/4/2026] [PCCtrl] 🌐 Mở URL: https://dhtcompany.com [chrome]
+[10:20:34 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776568834708.png
+[10:21:21 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:21:21 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:21:32 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (153 chars)
+[10:23:18 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[10:23:18 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[10:23:31 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (132 chars)

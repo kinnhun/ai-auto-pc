@@ -647,10 +647,15 @@ async function launchBrowser() {
   let page;
   try {
     const pages = await browser.pages();
-    page = pages.length > 0 ? pages[0] : await browser.newPage();
+    page = pages.find(p => p);
+    if (!page) page = await browser.newPage();
   } catch(e) {
     log('WARN', `pages() lỗi: ${e.message} — thử newPage()`);
-    page = await browser.newPage();
+    try {
+      page = await browser.newPage();
+    } catch(err2) {
+      throw new Error(`Unable to get browser page: ${err2.message}`);
+    }
   }
 
   if (!page) throw new Error('Unable to get browser page');
@@ -771,7 +776,8 @@ async function postToMessenger(message, posterPath = null) {
 //  SECTION 12 — PENDING POSTS STORE
 // ═══════════════════════════════════════════════════════════
 
-const pendingPosts = new Map();
+const { SessionMap } = require('./modules/session-db');
+const pendingPosts = new SessionMap('pendingPosts');
 let isGenerating = false;
 const makePendingKey = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
 
@@ -933,7 +939,7 @@ async function handleTgMessage(text) {
   else if (route.agent === 'SENIOR_DEV') {
     await tg('🤖 (Thư ký AI) Đang suy nghĩ...');
     // Gọi bot trò chuyện / fix bug general
-    const r = await AgentMgr.callAgent('fix_bug', text, { temperature: 0.5, maxTokens: 1000 });
+    const r = await AgentMgr.callAgent('fix_bug', text, { temperature: 0.5, maxTokens: 1000, useHistory: true });
     if (r) return tg(`${r.agentName}\n\n${esc(r.content.substring(0, 3500))}`);
     return tg('❌ AI không phản hồi!');
   }

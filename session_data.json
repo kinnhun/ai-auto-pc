@@ -1,0 +1,30 @@
+{
+  "pendingPCTasks": {
+    "pc_mo570roh": {
+      "aiText": "PLAN:\n1. Mở ứng dụng antygravity (vì không có thông tin màn hình nên không thể tìm icon, sẽ dùng lệnh mở app).\n2. Viết prompt chờ sẵn để fix lỗi. Do không có chi tiết lỗi từ màn hình, tôi sẽ gõ một prompt mở để bạn có thể bổ sung nội dung lỗi vào.\n\n[ACTION type=\"openapp\" app=\"antygravity\" args=\"\"]\n[ACTION type=\"type\" text=\"Bạn hãy giúp tôi fix lỗi này nhé: \"]",
+      "instruction": "mở antygravity và viết prompt để nó fix lỗi này nhé"
+    }
+  },
+  "pendingPCTasks_timestamp": 1776568829768,
+  "conversationHistory": {
+    "global": [
+      {
+        "role": "user",
+        "content": "test toàn bộ trang home này nhé về text chữ response giữa máy tính điện thoại ( f12 lên để test"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào bạn, tôi là **Antigravity**, trợ lý AI lập trình được phát triển bởi nhóm Google Deepmind. Tôi rất sẵn sàng \"pair programming\" cùng bạn để xử lý vấn"
+      },
+      {
+        "role": "user",
+        "content": "test dhtcompany .com"
+      },
+      {
+        "role": "assistant",
+        "content": "Chào bạn, vì tôi là một AI, tôi không thể trực tiếp mở trình duyệt, ấn F12 và \"nhìn\" trang `dhtcompany.com` bằng mắt thường thay bạn"
+      }
+    ]
+  },
+  "conversationHistory_timestamp": 1776569011280
+}

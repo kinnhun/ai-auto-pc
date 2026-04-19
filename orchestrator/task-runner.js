@@ -53,7 +53,8 @@ function init({ tg, tgRaw, restartFn }) {
 }
 
 // ── PENDING TASKS (chờ approval) ────────────────────────────
-const pendingTasks = new Map();
+const { SessionMap } = require('../modules/session-db');
+const pendingTasks = new SessionMap('pendingTasks');
 
 // ── VERIFIER ────────────────────────────────────────────────
 

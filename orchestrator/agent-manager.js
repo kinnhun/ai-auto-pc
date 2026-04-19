@@ -90,9 +90,21 @@ async function callAgent(taskType, prompt, opts = {}) {
     try {
       const finalPrompt = prompt + Memory.getMemoryContext();
       
+      const { SessionMap } = require('../modules/session-db');
+      const convDB = new SessionMap('conversationHistory');
+      let history = [];
+      if (opts.useHistory) {
+        history = convDB.get('global') || [];
+      }
+      
+      const messages = [
+        ...history,
+        { role: 'user', content: finalPrompt }
+      ];
+
       const resp = await axios.post(AI_ENDPOINT(), {
         model      : agent.model,
-        messages   : [{ role: 'user', content: finalPrompt }],
+        messages   : messages,
         temperature: opts.temperature ?? agent.temperature,
         max_tokens : opts.maxTokens   ?? agent.maxTokens,
       }, {
@@ -102,6 +114,13 @@ async function callAgent(taskType, prompt, opts = {}) {
 
       const content = resp.data?.choices?.[0]?.message?.content;
       if (!content) throw new Error('Empty response');
+
+      if (opts.useHistory) {
+        history.push({ role: 'user', content: prompt });
+        history.push({ role: 'assistant', content });
+        if (history.length > 20) history = history.slice(-20);
+        convDB.set('global', history);
+      }
 
       log(`✅ ${agent.name} hoàn thành (${content.length} chars)`);
       return {

@@ -136,7 +136,8 @@ PLAN:
   await _executePCActions(aiResult.content, instruction);
 }
 
-const pendingPCTasks = new Map();
+const { SessionMap } = require('../modules/session-db');
+const pendingPCTasks = new SessionMap('pendingPCTasks');
 
 async function _executePCActions(aiText, label) {
   const results = await PC.executeAIActions(aiText, async (shotFile, caption) => {

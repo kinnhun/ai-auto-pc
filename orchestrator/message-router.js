@@ -31,11 +31,9 @@ const ROUTES = [
 
   // ── PC CONTROLLER ────────────────────────────────────────
   { pattern: /^pc\s+.+/,                          handler: 'pc_task',         agent: 'PC_CONTROLLER' },
-  { pattern: /^(mở|mo|open)\s+(.+)/,              handler: 'pc_task',         agent: 'PC_CONTROLLER' },
-  { pattern: /^(vào|truy cập)\s+(fb|facebook|youtube|gg|google|web|trang|.+)/, handler: 'pc_task', agent: 'PC_CONTROLLER' },
-  { pattern: /^chụp màn hình/,                    handler: 'pc_task',         agent: 'PC_CONTROLLER' },
-  { pattern: /^(click|bấm)\s+.+/,                 handler: 'pc_task',         agent: 'PC_CONTROLLER' },
-  { pattern: /^gõ\s+.+/,                          handler: 'pc_task',         agent: 'PC_CONTROLLER' },
+  { pattern: /^(mở|mo|open|tắt|đóng|close|ẩn|hiện|thu nhỏ|phóng to|chỉ để|giữ lại)\s+(.+)/, handler: 'pc_task', agent: 'PC_CONTROLLER' },
+  { pattern: /^(vào|truy cập)\s+(fb|facebook|youtube|gg|google|web|trang|ứng dụng|app)/, handler: 'pc_task', agent: 'PC_CONTROLLER' },
+  { pattern: /^(chụp|nhấn|bấm|click|gõ|type|cuộn|scroll|kéo|di chuột)\s+.+/, handler: 'pc_task', agent: 'PC_CONTROLLER' },
   { pattern: /^(chạy lệnh|cmd|terminal)\s+.+/,    handler: 'pc_task',         agent: 'PC_CONTROLLER' },
 
   // ── CLAUDE CODER ─────────────────────────────────────────
