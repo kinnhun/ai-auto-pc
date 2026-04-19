@@ -1,15 +1,22 @@
 /**
  * ╔══════════════════════════════════════════════════════════════╗
- * ║  FB AUTO-BOT v6.0 — Powered by Antigravity AI              ║
+ * ║  FB AUTO-BOT v6.1 — Powered by Antigravity AI              ║
  * ╠══════════════════════════════════════════════════════════════╣
  * ║  LUỒNG XỬ LÝ:                                              ║
  * ║  1. Thu thập trending (HN + DevTo + Reddit)                 ║
- * ║  2. Antigravity AI → tạo bài chuẩn SEO chuyên nghiệp       ║
+ * ║  2. Antigravity AI → tạo bài chuẩn SEO (3-step chain)      ║
  * ║  3. Generate poster HTML→PNG                                ║
  * ║  4. Gửi Telegram → User DUYỆT (inline keyboard)            ║
  * ║  5. Bấm ✅ → Puppeteer post lên Facebook Messenger          ║
- * ║  6. Lỗi → Antigravity phân tích → tự sửa code → restart    ║
- * ║  7. Mỗi 12h → Antigravity review & nâng cấp tự động        ║
+ * ║  6. Lỗi → modules/self-heal.js:                            ║
+ * ║       • Git backup (rollback point)                         ║
+ * ║       • AI phân tích + sinh patch                           ║
+ * ║       • Whitelist check                                     ║
+ * ║       • Apply patch + syntax check                          ║
+ * ║       • Rollback nếu fail                                   ║
+ * ║       • Approval qua Telegram                               ║
+ * ║       • Diff log + báo cáo                                  ║
+ * ║  7. Mỗi 12h → Antigravity auto-upgrade (user duyệt)        ║
  * ╚══════════════════════════════════════════════════════════════╝
  */
 
@@ -20,6 +27,7 @@ const axios     = require('axios');
 const fs        = require('fs');
 const path      = require('path');
 const { execSync, spawn } = require('child_process');
+const SelfHeal  = require('./modules/self-heal');
 
 // ═══════════════════════════════════════════════════════════
 //  SECTION 1 — BOOTSTRAP & CONFIG
@@ -192,133 +200,50 @@ async function callAI(prompt, opts = {}) {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  SECTION 5 — ANTIGRAVITY SELF-FIX (Tự sửa code khi lỗi)
+//  SECTION 5 — ANTIGRAVITY SELF-HEAL (via modules/self-heal.js)
 // ═══════════════════════════════════════════════════════════
+// Self-heal được tách ra modules/self-heal.js với đầy đủ safety:
+//   • Whitelist file được phép sửa
+//   • Git backup trước mỗi patch
+//   • Syntax check sau mỗi patch
+//   • Diff log (heal_log/)
+//   • Rollback tự động nếu fail
+//   • Approval qua Telegram
+//
+// Khởi tạo module sau khi tg() và callAI() đã sẵn sàng
+function initSelfHeal() {
+  const TaskRunner = require('./orchestrator/task-runner');
 
-let selfFixLock = false;
-let selfFixCount = 0;
-const MAX_SELF_FIX = 3;
+  // tgSimple: gửi text
+  const tgSimple = async (text) =>
+    tgCall('sendMessage', { chat_id: OWNER(), text, parse_mode: 'HTML' });
 
+  // tgRaw: gửi object (hỗ trợ inline keyboard, caption, ...)
+  const tgRaw = async (payload) => {
+    if (typeof payload === 'string') return tgSimple(payload);
+    return tgCall('sendMessage', { chat_id: OWNER(), parse_mode: 'HTML', ...payload });
+  };
+
+  SelfHeal.init({
+    tg        : tgRaw,   // self-heal dùng tgRaw để có inline keyboard
+    callAI,
+    restartFn : autoRestart,
+  });
+
+  // TaskRunner cũng cần inject riêng (upgrade dùng trực tiếp)
+  TaskRunner.init({
+    callAI,
+    tg        : tgSimple,
+    tgRaw,
+    restartFn : autoRestart,
+  });
+
+  log('INFO', `✅ SelfHeal + TaskRunner ready | Whitelist: ${SelfHeal.HEAL_CONFIG.writableFiles.join(', ')}`);
+}
+
+// Shorthand gọi từ các error handler
 async function antigravitySelfFix(errorMsg, context) {
-  if (selfFixLock) { log('WARN', '[SelfFix] Đang chạy, bỏ qua...'); return; }
-  if (selfFixCount >= MAX_SELF_FIX) {
-    log('WARN', `[SelfFix] Đã fix ${MAX_SELF_FIX} lần, dừng để tránh loop.`);
-    await tg(`🛑 <b>Self-Fix dừng</b> — đã sửa ${MAX_SELF_FIX} lần.\nCần can thiệp thủ công!`);
-    return;
-  }
-
-  selfFixLock = true;
-  selfFixCount++;
-  await tg(`🔧 <b>Antigravity Self-Fix #${selfFixCount}</b>\n\nLỗi: <pre>${esc(String(errorMsg).substring(0, 300))}</pre>\nContext: <code>${esc(context)}</code>\n\n⏳ Đang phân tích...`);
-
-  try {
-    // Đọc toàn bộ source code
-    const source = fs.readFileSync(BOTJS, 'utf8');
-    const recentErrors = errorHistory.slice(-10).map((e, i) => `${i+1}. [${e.ts}] ${e.error}`).join('\n');
-
-    const prompt = `Bạn là Antigravity AI — Senior Node.js Engineer chuyên sửa bug tự động.
-
-== SOURCE CODE (bot.js) ==
-\`\`\`javascript
-${source}
-\`\`\`
-
-== LỖI HIỆN TẠI ==
-Error: ${errorMsg}
-Context: ${context}
-
-== LỊCH SỬ LỖI GẦN ĐÂY ==
-${recentErrors || 'Không có'}
-
-== NHIỆM VỤ ==
-1. Xác định CHÍNH XÁC nguyên nhân lỗi trong code  
-2. Viết code FIX tối thiểu (không thay đổi logic không liên quan)
-3. Output theo định dạng CHÍNH XÁC:
-
-[ANALYSIS]
-Nguyên nhân: ...
-Vị trí lỗi: dòng ... function ...
-[/ANALYSIS]
-
-[CODE_FIX]
-find: <chuỗi code cần tìm CHÍNH XÁC, bao gồm whitespace>
-replace: <chuỗi code thay thế>
-[/CODE_FIX]
-
-[CMD_FIX]
-<lệnh shell cần chạy nếu có, ví dụ: npm install xyz>
-[/CMD_FIX]
-
-Nếu không cần fix code: bỏ qua [CODE_FIX]
-Nếu không cần chạy lệnh: bỏ qua [CMD_FIX]
-Trả lời NGẮN GỌN, CHÍNH XÁC.`;
-
-    // Dùng Antigravity Pro để self-fix
-    const result = await callAI(prompt, { temperature: 0.1, preferModel: 'Antigravity Pro', maxTokens: 3000 });
-
-    if (!result) {
-      await tg('❌ Antigravity không phản hồi. Không thể tự sửa!');
-      return;
-    }
-
-    await tg(`🤖 <b>Antigravity phân tích:</b>\n\n${esc(result.content.substring(0, 800))}`);
-
-    let fixApplied = false;
-
-    // Áp dụng CODE_FIX
-    const codeMatch = result.content.match(/\[CODE_FIX\]([\s\S]*?)\[\/CODE_FIX\]/i);
-    if (codeMatch) {
-      const block = codeMatch[1];
-      const findMatch    = block.match(/find:\s*([\s\S]+?)(?=replace:|$)/i);
-      const replaceMatch = block.match(/replace:\s*([\s\S]+?)$/i);
-
-      if (findMatch && replaceMatch) {
-        const findStr    = findMatch[1].trim();
-        const replaceStr = replaceMatch[1].trim();
-        let src = fs.readFileSync(BOTJS, 'utf8');
-
-        if (src.includes(findStr)) {
-          src = src.replace(findStr, replaceStr);
-          fs.writeFileSync(BOTJS, src, 'utf8');
-          log('INFO', `✅ [SelfFix] Code đã sửa!`);
-          await tg(`✅ <b>Code đã được sửa tự động!</b>\n\n<code>Find:</code> <pre>${esc(findStr.substring(0,200))}</pre>\n<code>Replace:</code> <pre>${esc(replaceStr.substring(0,200))}</pre>`);
-          fixApplied = true;
-        } else {
-          log('WARN', '[SelfFix] Không tìm thấy chuỗi cần sửa trong source!');
-          await tg('⚠️ Không tìm thấy đoạn code cần sửa. Fix thủ công!');
-        }
-      }
-    }
-
-    // Áp dụng CMD_FIX
-    const cmdMatch = result.content.match(/\[CMD_FIX\]([\s\S]*?)\[\/CMD_FIX\]/i);
-    if (cmdMatch) {
-      const cmd = cmdMatch[1].trim();
-      if (cmd) {
-        log('INFO', `🔧 [SelfFix] Chạy: ${cmd}`);
-        try {
-          const out = execSync(cmd, { cwd: __dir, stdio: 'pipe', timeout: 60000 }).toString();
-          await tg(`✅ <b>CMD đã chạy:</b> <code>${esc(cmd)}</code>\n<pre>${esc(out.substring(0,300))}</pre>`);
-          fixApplied = true;
-        } catch(e2) {
-          log('WARN', `CMD fix lỗi: ${e2.message}`);
-          await tg(`⚠️ CMD fix thất bại: <code>${esc(e2.message)}</code>`);
-        }
-      }
-    }
-
-    // Auto-restart nếu đã fix
-    if (fixApplied && config.autoRestart) {
-      await tg('🔄 <b>Đang khởi động lại bot sau khi sửa...</b>');
-      await delay(2000);
-      autoRestart();
-    }
-
-  } catch(err) {
-    log('ERROR', `SelfFix crash: ${err.message}`);
-  } finally {
-    selfFixLock = false;
-  }
+  return SelfHeal.selfHeal(errorMsg, context, { restartFn: autoRestart });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -809,11 +734,12 @@ const COMMANDS = {
   'upgrade'   : () => antigravityAutoUpgrade(),
   'nâng cấp'  : () => antigravityAutoUpgrade(),
   'status'    : () => tg(
-    `📋 <b>BOT STATUS v6.0</b>\n\n` +
+    `📋 <b>BOT STATUS v6.1</b>\n\n` +
     `✅ Antigravity AI: <b>Online</b>\n` +
     `📊 Bài đã đăng: ${postHistory.length}\n` +
     `📝 Đang chờ duyệt: ${pendingPosts.size}\n` +
-    `🔧 Lần self-fix: ${selfFixCount}/${MAX_SELF_FIX}\n` +
+    `🛡️ Self-Heal fixes: ${SelfHeal.getFixCount()}/${SelfHeal.HEAL_CONFIG.maxFixPerSession}\n` +
+    `📂 Whitelist: ${SelfHeal.HEAL_CONFIG.writableFiles.join(', ')}\n` +
     `⏱ Chu kỳ: ${config.intervalMinutes} phút\n` +
     `🕒 ${new Date().toLocaleString('vi-VN')}`
   ),
@@ -873,7 +799,24 @@ async function pollTelegram() {
         await tgAnswerCb(cb.id);
 
         // Upgrade callbacks
+        // [1] Self-heal approval (heal_apply, heal_diff, heal_skip)
+        if (['heal_apply', 'heal_diff', 'heal_skip'].includes(action)) {
+          await tgAnswerCb(cb.id);
+          await SelfHeal.handleCallback(action, key, autoRestart);
+          continue;
+        }
+
+        // [2] Task runner approval (task_apply, task_preview, task_skip)
+        if (['task_apply', 'task_preview', 'task_skip'].includes(action)) {
+          await tgAnswerCb(cb.id);
+          const TaskRunner = require('./orchestrator/task-runner');
+          await TaskRunner.handleCallback(action, key);
+          continue;
+        }
+
+        // [3] Upgrade callbacks
         if (action === 'upgrade') {
+          await tgAnswerCb(cb.id);
           if (key === 'apply' && pendingUpgrade) {
             await tgEditMsg(cb.message.chat.id, cb.message.message_id, '⏳ <b>Đang áp dụng upgrade...</b>');
             await applyUpgrade(pendingUpgrade.content);
@@ -951,11 +894,17 @@ async function main() {
   console.log('╚══════════════════════════════════════════════════════════╝\n');
 
   // Khởi động
+  // Init self-heal module (depende em tg e callAI)
+  initSelfHeal();
+
   await tg(
-    `🚀 <b>FB AUTO-BOT v6.0 — ANTIGRAVITY EDITION</b>\n\n` +
+    `🚀 <b>FB AUTO-BOT v6.1 — ANTIGRAVITY EDITION</b>\n\n` +
     `🤖 AI: Antigravity Pro (primary)\n` +
-    `✅ SEO Content: Bật\n` +
-    `🛡️ Self-Fix: Bật (tối đa ${MAX_SELF_FIX} lần)\n` +
+    `✅ SEO Content: Bật (3-step chain)\n` +
+    `🛡️ Self-Heal: Bật\n` +
+    `   • Whitelist: bot.js, config.json, modules/*\n` +
+    `   • Git backup + rollback\n` +
+    `   • Approval mode: ${SelfHeal.HEAL_CONFIG.requireApproval ? 'BẬT' : 'TẮT'}\n` +
     `🚀 Auto-Upgrade: Mỗi ${config.autoUpgradeIntervalHours || 12}h\n` +
     `⏱ Tạo bài: Mỗi ${config.intervalMinutes} phút\n` +
     `🕒 ${new Date().toLocaleString('vi-VN')}\n\n` +

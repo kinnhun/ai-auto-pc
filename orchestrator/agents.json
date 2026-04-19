@@ -1,0 +1,75 @@
+{
+  "_comment": "AGENT REGISTRY — Mỗi agent có tên, vai trò và model riêng. Không để 2 agent cùng làm 1 việc.",
+
+  "agents": {
+
+    "SENIOR_DEV": {
+      "name"       : "🧠 Senior Dev",
+      "model"      : "ag/gemini-3.1-pro-high",
+      "role"       : "Phân tích lỗi, viết patch fix bug",
+      "tasks"      : ["fix_bug", "fix_selector", "fix_telegram"],
+      "temperature": 0.1,
+      "maxTokens"  : 4000,
+      "description": "Chuyên sửa bug. Không viết content. Không upgrade."
+    },
+
+    "CODE_REVIEWER": {
+      "name"       : "🔍 Code Reviewer",
+      "model"      : "cx/gpt-5.3-codex",
+      "role"       : "Review code, đề xuất cải tiến, refactor",
+      "tasks"      : ["upgrade", "add_feature"],
+      "temperature": 0.2,
+      "maxTokens"  : 4000,
+      "description": "Chuyên review và nâng cấp. Không sửa bug runtime."
+    },
+
+    "CONTENT_WRITER": {
+      "name"       : "✍️ Content Writer",
+      "model"      : "ag/gemini-3-flash",
+      "role"       : "Viết bài Facebook chuẩn SEO, chọn chủ đề trending",
+      "tasks"      : ["write_content", "pick_topic"],
+      "temperature": 0.85,
+      "maxTokens"  : 1500,
+      "description": "Chuyên viết content. Không đụng code."
+    },
+
+    "TREND_ANALYST": {
+      "name"       : "📊 Trend Analyst",
+      "model"      : "ag/gemini-3-flash",
+      "role"       : "Phân tích trending, chọn chủ đề hot nhất",
+      "tasks"      : ["analyze_trend"],
+      "temperature": 0.6,
+      "maxTokens"  : 800,
+      "description": "Chuyên phân tích xu hướng. Output ngắn, có số liệu."
+    },
+
+    "BACKUP_DEV": {
+      "name"       : "🔧 Backup Dev",
+      "model"      : "cx/gpt-5.3-codex-high",
+      "role"       : "Dự phòng khi Senior Dev không available",
+      "tasks"      : ["fix_bug", "fix_selector"],
+      "temperature": 0.1,
+      "maxTokens"  : 3000,
+      "description": "Chỉ dùng khi SENIOR_DEV fail. Không chạy song song."
+    }
+  },
+
+  "task_assignment": {
+    "fix_bug"      : ["SENIOR_DEV", "BACKUP_DEV"],
+    "fix_selector" : ["SENIOR_DEV", "BACKUP_DEV"],
+    "fix_telegram" : ["SENIOR_DEV", "BACKUP_DEV"],
+    "upgrade"      : ["CODE_REVIEWER"],
+    "add_feature"  : ["CODE_REVIEWER"],
+    "write_content": ["CONTENT_WRITER"],
+    "pick_topic"   : ["TREND_ANALYST", "CONTENT_WRITER"],
+    "analyze_trend": ["TREND_ANALYST"]
+  },
+
+  "_notes": [
+    "Mỗi task có primary agent và fallback agent",
+    "Không bao giờ gọi 2 agent cùng lúc cho 1 task",
+    "Temperature thấp hơn = code task (fix, review)",
+    "Temperature cao hơn = creative task (content)",
+    "Chỉ SENIOR_DEV và CODE_REVIEWER được phép sửa file"
+  ]
+}
