@@ -1,0 +1,1214 @@
+{
+  "timestamp": "2026-04-19T01:52:04.791Z",
+  "file": "bot.js",
+  "taskType": "fix_bug",
+  "patchId": "fix_bug_mo54194v",
+  "result": "OK",
+  "stats": {
+    "added": 3,
+    "removed": 0,
+    "changed": 413
+  },
+  "changes": [
+    {
+      "type": "~",
+      "line": 520,
+      "from": "      puppeteerArgs: { args: ['--no-sandbox', '--disable-setuid-sandbox'] }",
+      "to": "      puppeteerArgs: {"
+    },
+    {
+      "type": "~",
+      "line": 521,
+      "from": "    });",
+      "to": "        executablePath: findBrowser() || undefined,"
+    },
+    {
+      "type": "~",
+      "line": 522,
+      "from": "    log('INFO', `🖼️ Poster: ${posterPath}`);",
+      "to": "        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']"
+    },
+    {
+      "type": "~",
+      "line": 523,
+      "from": "    return posterPath;",
+      "to": "      }"
+    },
+    {
+      "type": "~",
+      "line": 524,
+      "from": "  } catch(e) {",
+      "to": "    });"
+    },
+    {
+      "type": "~",
+      "line": 525,
+      "from": "    log('WARN', `Poster thất bại: ${e.message}`);",
+      "to": "    log('INFO', `🖼️ Poster: ${posterPath}`);"
+    },
+    {
+      "type": "~",
+      "line": 526,
+      "from": "    return null;",
+      "to": "    return posterPath;"
+    },
+    {
+      "type": "~",
+      "line": 527,
+      "from": "  }",
+      "to": "  } catch(e) {"
+    },
+    {
+      "type": "~",
+      "line": 528,
+      "from": "}",
+      "to": "    log('WARN', `Poster thất bại: ${e.message}`);"
+    },
+    {
+      "type": "~",
+      "line": 529,
+      "from": "",
+      "to": "    return null;"
+    },
+    {
+      "type": "~",
+      "line": 530,
+      "from": "// ═══════════════════════════════════════════════════════════",
+      "to": "  }"
+    },
+    {
+      "type": "~",
+      "line": 531,
+      "from": "//  SECTION 11 — FACEBOOK MESSENGER (Puppeteer)",
+      "to": "}"
+    },
+    {
+      "type": "~",
+      "line": 532,
+      "from": "// ═══════════════════════════════════════════════════════════",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 533,
+      "from": "",
+      "to": "// ═══════════════════════════════════════════════════════════"
+    },
+    {
+      "type": "~",
+      "line": 534,
+      "from": "const CHROME_PATHS = [",
+      "to": "//  SECTION 11 — FACEBOOK MESSENGER (Puppeteer)"
+    },
+    {
+      "type": "~",
+      "line": 535,
+      "from": "  'C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe',",
+      "to": "// ═══════════════════════════════════════════════════════════"
+    },
+    {
+      "type": "~",
+      "line": 536,
+      "from": "  'C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe',",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 537,
+      "from": "  path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),",
+      "to": "const CHROME_PATHS = ["
+    },
+    {
+      "type": "~",
+      "line": 538,
+      "from": "  'C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe',",
+      "to": "  'C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe',"
+    },
+    {
+      "type": "~",
+      "line": 539,
+      "from": "  'C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe',",
+      "to": "  'C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe',"
+    },
+    {
+      "type": "~",
+      "line": 540,
+      "from": "];",
+      "to": "  path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'Application', 'chrome.exe'),"
+    },
+    {
+      "type": "~",
+      "line": 541,
+      "from": "",
+      "to": "  'C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe',"
+    },
+    {
+      "type": "~",
+      "line": 542,
+      "from": "function findBrowser() {",
+      "to": "  'C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe',"
+    },
+    {
+      "type": "~",
+      "line": 543,
+      "from": "  return CHROME_PATHS.find(p => fs.existsSync(p)) || null;",
+      "to": "];"
+    },
+    {
+      "type": "~",
+      "line": 544,
+      "from": "}",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 545,
+      "from": "",
+      "to": "function findBrowser() {"
+    },
+    {
+      "type": "~",
+      "line": 546,
+      "from": "async function launchBrowser() {",
+      "to": "  return CHROME_PATHS.find(p => fs.existsSync(p)) || null;"
+    },
+    {
+      "type": "~",
+      "line": 547,
+      "from": "  const execPath = findBrowser();",
+      "to": "}"
+    },
+    {
+      "type": "~",
+      "line": 548,
+      "from": "  const browser = await puppeteer.launch({",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 549,
+      "from": "    headless: false,",
+      "to": "async function launchBrowser() {"
+    },
+    {
+      "type": "~",
+      "line": 550,
+      "from": "    userDataDir: SESSION_DIR,",
+      "to": "  const execPath = findBrowser();"
+    },
+    {
+      "type": "~",
+      "line": 551,
+      "from": "    executablePath: execPath || undefined,",
+      "to": "  const browser = await puppeteer.launch({"
+    },
+    {
+      "type": "~",
+      "line": 552,
+      "from": "    args: [",
+      "to": "    headless: false,"
+    },
+    {
+      "type": "~",
+      "line": 553,
+      "from": "      '--no-sandbox', '--disable-setuid-sandbox',",
+      "to": "    userDataDir: SESSION_DIR,"
+    },
+    {
+      "type": "~",
+      "line": 554,
+      "from": "      '--disable-blink-features=AutomationControlled',",
+      "to": "    executablePath: execPath || undefined,"
+    },
+    {
+      "type": "~",
+      "line": 555,
+      "from": "      '--disable-infobars', '--disable-notifications',",
+      "to": "    args: ["
+    },
+    {
+      "type": "~",
+      "line": 556,
+      "from": "      '--disable-dev-shm-usage', '--window-size=1366,768', '--lang=vi-VN'",
+      "to": "      '--no-sandbox', '--disable-setuid-sandbox',"
+    },
+    {
+      "type": "~",
+      "line": 557,
+      "from": "    ],",
+      "to": "      '--disable-blink-features=AutomationControlled',"
+    },
+    {
+      "type": "~",
+      "line": 558,
+      "from": "    defaultViewport: { width: 1366, height: 768 },",
+      "to": "      '--disable-infobars', '--disable-notifications',"
+    },
+    {
+      "type": "~",
+      "line": 559,
+      "from": "    ignoreHTTPSErrors: true,",
+      "to": "      '--disable-dev-shm-usage', '--window-size=1366,768', '--lang=vi-VN'"
+    },
+    {
+      "type": "~",
+      "line": 560,
+      "from": "    ignoreDefaultArgs: ['--enable-automation'],",
+      "to": "    ],"
+    },
+    {
+      "type": "~",
+      "line": 561,
+      "from": "  });",
+      "to": "    defaultViewport: { width: 1366, height: 768 },"
+    },
+    {
+      "type": "~",
+      "line": 562,
+      "from": "",
+      "to": "    ignoreHTTPSErrors: true,"
+    },
+    {
+      "type": "~",
+      "line": 563,
+      "from": "  const pages = await browser.pages();",
+      "to": "    ignoreDefaultArgs: ['--enable-automation'],"
+    },
+    {
+      "type": "~",
+      "line": 564,
+      "from": "  const page = pages[0] || await browser.newPage();",
+      "to": "  });"
+    },
+    {
+      "type": "~",
+      "line": 565,
+      "from": "  await page.evaluateOnNewDocument(() => {",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 566,
+      "from": "    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });",
+      "to": "  const pages = await browser.pages();"
+    },
+    {
+      "type": "~",
+      "line": 567,
+      "from": "    window.chrome = { runtime: {} };",
+      "to": "  const page = pages[0] || await browser.newPage();"
+    },
+    {
+      "type": "~",
+      "line": 568,
+      "from": "    Object.defineProperty(navigator, 'plugins', { get: () => [1,2,3] });",
+      "to": "  await page.evaluateOnNewDocument(() => {"
+    },
+    {
+      "type": "~",
+      "line": 569,
+      "from": "  });",
+      "to": "    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });"
+    },
+    {
+      "type": "~",
+      "line": 570,
+      "from": "  return { browser, page };",
+      "to": "    window.chrome = { runtime: {} };"
+    },
+    {
+      "type": "~",
+      "line": 571,
+      "from": "}",
+      "to": "    Object.defineProperty(navigator, 'plugins', { get: () => [1,2,3] });"
+    },
+    {
+      "type": "~",
+      "line": 572,
+      "from": "",
+      "to": "  });"
+    },
+    {
+      "type": "~",
+      "line": 573,
+      "from": "async function ensureFbLogin(page) {",
+      "to": "  return { browser, page };"
+    },
+    {
+      "type": "~",
+      "line": 574,
+      "from": "  await page.goto('https://www.facebook.com/', { waitUntil: 'domcontentloaded', timeout: 30000 });",
+      "to": "}"
+    },
+    {
+      "type": "~",
+      "line": 575,
+      "from": "  await delay(3000);",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 576,
+      "from": "  if (!page.url().includes('/login')) { log('INFO', '✅ FB: Đã đăng nhập'); return true; }",
+      "to": "async function ensureFbLogin(page) {"
+    },
+    {
+      "type": "~",
+      "line": 577,
+      "from": "",
+      "to": "  await page.goto('https://www.facebook.com/', { waitUntil: 'domcontentloaded', timeout: 30000 });"
+    },
+    {
+      "type": "~",
+      "line": 578,
+      "from": "  log('WARN', '⚠️ Cần đăng nhập Facebook!');",
+      "to": "  await delay(3000);"
+    },
+    {
+      "type": "~",
+      "line": 579,
+      "from": "  await tg('⚠️ <b>Cần đăng nhập Facebook!</b>\\nBot đang mở trình duyệt — login thủ công (3 phút).');",
+      "to": "  if (!page.url().includes('/login')) { log('INFO', '✅ FB: Đã đăng nhập'); return true; }"
+    },
+    {
+      "type": "~",
+      "line": 581,
+      "from": "  for (let i = 0; i < 36; i++) {",
+      "to": "  log('WARN', '⚠️ Cần đăng nhập Facebook!');"
+    },
+    {
+      "type": "~",
+      "line": 582,
+      "from": "    await delay(5000);",
+      "to": "  await tg('⚠️ <b>Cần đăng nhập Facebook!</b>\\nBot đang mở trình duyệt — login thủ công (3 phút).');"
+    },
+    {
+      "type": "~",
+      "line": 583,
+      "from": "    if (!page.url().includes('/login')) {",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 584,
+      "from": "      await tg('✅ <b>Đăng nhập FB thành công!</b>');",
+      "to": "  for (let i = 0; i < 36; i++) {"
+    },
+    {
+      "type": "~",
+      "line": 585,
+      "from": "      return true;",
+      "to": "    await delay(5000);"
+    },
+    {
+      "type": "~",
+      "line": 586,
+      "from": "    }",
+      "to": "    if (!page.url().includes('/login')) {"
+    },
+    {
+      "type": "~",
+      "line": 587,
+      "from": "  }",
+      "to": "      await tg('✅ <b>Đăng nhập FB thành công!</b>');"
+    },
+    {
+      "type": "~",
+      "line": 588,
+      "from": "  await tg('❌ Timeout đăng nhập. Thử lại sau!');",
+      "to": "      return true;"
+    },
+    {
+      "type": "~",
+      "line": 589,
+      "from": "  return false;",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 590,
+      "from": "}",
+      "to": "  }"
+    },
+    {
+      "type": "~",
+      "line": 591,
+      "from": "",
+      "to": "  await tg('❌ Timeout đăng nhập. Thử lại sau!');"
+    },
+    {
+      "type": "~",
+      "line": 592,
+      "from": "async function postToMessenger(message, posterPath = null) {",
+      "to": "  return false;"
+    },
+    {
+      "type": "~",
+      "line": 593,
+      "from": "  log('INFO', '📨 Gửi Messenger...');",
+      "to": "}"
+    },
+    {
+      "type": "~",
+      "line": 594,
+      "from": "  let browser = null;",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 595,
+      "from": "",
+      "to": "async function postToMessenger(message, posterPath = null) {"
+    },
+    {
+      "type": "~",
+      "line": 596,
+      "from": "  try {",
+      "to": "  log('INFO', '📨 Gửi Messenger...');"
+    },
+    {
+      "type": "~",
+      "line": 597,
+      "from": "    const launched = await launchBrowser();",
+      "to": "  let browser = null;"
+    },
+    {
+      "type": "~",
+      "line": 598,
+      "from": "    browser = launched.browser;",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 599,
+      "from": "    const page  = launched.page;",
+      "to": "  try {"
+    },
+    {
+      "type": "~",
+      "line": 600,
+      "from": "",
+      "to": "    const launched = await launchBrowser();"
+    },
+    {
+      "type": "~",
+      "line": 601,
+      "from": "    if (!(await ensureFbLogin(page))) { await browser.close(); return false; }",
+      "to": "    browser = launched.browser;"
+    },
+    {
+      "type": "~",
+      "line": 602,
+      "from": "",
+      "to": "    const page  = launched.page;"
+    },
+    {
+      "type": "~",
+      "line": 603,
+      "from": "    await page.goto(config.targetUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 604,
+      "from": "    await delay(4000);",
+      "to": "    if (!(await ensureFbLogin(page))) { await browser.close(); return false; }"
+    },
+    {
+      "type": "~",
+      "line": 606,
+      "from": "    // Gửi poster nếu có",
+      "to": "    await page.goto(config.targetUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });"
+    },
+    {
+      "type": "~",
+      "line": 607,
+      "from": "    if (posterPath && fs.existsSync(posterPath)) {",
+      "to": "    await delay(4000);"
+    },
+    {
+      "type": "~",
+      "line": 608,
+      "from": "      try {",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 609,
+      "from": "        await page.evaluate(() => {",
+      "to": "    // Gửi poster nếu có"
+    },
+    {
+      "type": "~",
+      "line": 610,
+      "from": "          document.querySelectorAll('input[type=\"file\"]').forEach(el =>",
+      "to": "    if (posterPath && fs.existsSync(posterPath)) {"
+    },
+    {
+      "type": "~",
+      "line": 611,
+      "from": "            el.style.cssText = 'display:block!important;opacity:1!important;position:fixed!important;top:0!important;left:0!important;z-index:99999!important;'",
+      "to": "      try {"
+    },
+    {
+      "type": "~",
+      "line": 612,
+      "from": "          );",
+      "to": "        await page.evaluate(() => {"
+    },
+    {
+      "type": "~",
+      "line": 613,
+      "from": "        });",
+      "to": "          document.querySelectorAll('input[type=\"file\"]').forEach(el =>"
+    },
+    {
+      "type": "~",
+      "line": 614,
+      "from": "        await delay(400);",
+      "to": "            el.style.cssText = 'display:block!important;opacity:1!important;position:fixed!important;top:0!important;left:0!important;z-index:99999!important;'"
+    },
+    {
+      "type": "~",
+      "line": 615,
+      "from": "        const fi = await page.$('input[type=\"file\"]');",
+      "to": "          );"
+    },
+    {
+      "type": "~",
+      "line": 616,
+      "from": "        if (fi) { await fi.uploadFile(posterPath); log('INFO', '📎 Poster attached'); await delay(3000); }",
+      "to": "        });"
+    },
+    {
+      "type": "~",
+      "line": 617,
+      "from": "      } catch(e) { log('WARN', `Poster skip: ${e.message}`); }",
+      "to": "        await delay(400);"
+    },
+    {
+      "type": "~",
+      "line": 618,
+      "from": "    }",
+      "to": "        const fi = await page.$('input[type=\"file\"]');"
+    },
+    {
+      "type": "~",
+      "line": 619,
+      "from": "",
+      "to": "        if (fi) { await fi.uploadFile(posterPath); log('INFO', '📎 Poster attached'); await delay(3000); }"
+    },
+    {
+      "type": "~",
+      "line": 620,
+      "from": "    // Tìm ô nhập chat",
+      "to": "      } catch(e) { log('WARN', `Poster skip: ${e.message}`); }"
+    },
+    {
+      "type": "~",
+      "line": 621,
+      "from": "    const CHAT_SELECTORS = [",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 622,
+      "from": "      'div[role=\"textbox\"][contenteditable=\"true\"]',",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 623,
+      "from": "      'div[aria-label=\"Aa\"][contenteditable]',",
+      "to": "    // Tìm ô nhập chat"
+    },
+    {
+      "type": "~",
+      "line": 624,
+      "from": "      '[contenteditable=\"true\"][data-lexical-editor]',",
+      "to": "    const CHAT_SELECTORS = ["
+    },
+    {
+      "type": "~",
+      "line": 625,
+      "from": "      'div[contenteditable=\"true\"]',",
+      "to": "      'div[role=\"textbox\"][contenteditable=\"true\"]',"
+    },
+    {
+      "type": "~",
+      "line": 626,
+      "from": "    ];",
+      "to": "      'div[aria-label=\"Aa\"][contenteditable]',"
+    },
+    {
+      "type": "~",
+      "line": 627,
+      "from": "",
+      "to": "      '[contenteditable=\"true\"][data-lexical-editor]',"
+    },
+    {
+      "type": "~",
+      "line": 628,
+      "from": "    let chatBox = null;",
+      "to": "      'div[contenteditable=\"true\"]',"
+    },
+    {
+      "type": "~",
+      "line": 629,
+      "from": "    for (const sel of CHAT_SELECTORS) {",
+      "to": "    ];"
+    },
+    {
+      "type": "~",
+      "line": 630,
+      "from": "      try {",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 631,
+      "from": "        await page.waitForSelector(sel, { timeout: 8000 });",
+      "to": "    let chatBox = null;"
+    },
+    {
+      "type": "~",
+      "line": 632,
+      "from": "        chatBox = await page.$(sel);",
+      "to": "    for (const sel of CHAT_SELECTORS) {"
+    },
+    {
+      "type": "~",
+      "line": 633,
+      "from": "        if (chatBox) { log('INFO', `Chat: ${sel}`); break; }",
+      "to": "      try {"
+    },
+    {
+      "type": "~",
+      "line": 634,
+      "from": "      } catch(e) {}",
+      "to": "        await page.waitForSelector(sel, { timeout: 8000 });"
+    },
+    {
+      "type": "~",
+      "line": 635,
+      "from": "    }",
+      "to": "        chatBox = await page.$(sel);"
+    },
+    {
+      "type": "~",
+      "line": 636,
+      "from": "",
+      "to": "        if (chatBox) { log('INFO', `Chat: ${sel}`); break; }"
+    },
+    {
+      "type": "~",
+      "line": 637,
+      "from": "    if (!chatBox) {",
+      "to": "      } catch(e) {}"
+    },
+    {
+      "type": "~",
+      "line": 638,
+      "from": "      throw new Error('Không tìm thấy ô chat Messenger!');",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 639,
+      "from": "    }",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 640,
+      "from": "",
+      "to": "    if (!chatBox) {"
+    },
+    {
+      "type": "~",
+      "line": 641,
+      "from": "    await chatBox.click();",
+      "to": "      throw new Error('Không tìm thấy ô chat Messenger!');"
+    },
+    {
+      "type": "~",
+      "line": 642,
+      "from": "    await delay(600);",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 644,
+      "from": "    // Type từng dòng",
+      "to": "    await chatBox.click();"
+    },
+    {
+      "type": "~",
+      "line": 645,
+      "from": "    for (let i = 0, lines = message.split('\\n'); i < lines.length; i++) {",
+      "to": "    await delay(600);"
+    },
+    {
+      "type": "~",
+      "line": 646,
+      "from": "      await page.keyboard.type(lines[i], { delay: 6 });",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 647,
+      "from": "      if (i < lines.length - 1) {",
+      "to": "    // Type từng dòng"
+    },
+    {
+      "type": "~",
+      "line": 648,
+      "from": "        await page.keyboard.down('Shift');",
+      "to": "    for (let i = 0, lines = message.split('\\n'); i < lines.length; i++) {"
+    },
+    {
+      "type": "~",
+      "line": 649,
+      "from": "        await page.keyboard.press('Enter');",
+      "to": "      await page.keyboard.type(lines[i], { delay: 6 });"
+    },
+    {
+      "type": "~",
+      "line": 650,
+      "from": "        await page.keyboard.up('Shift');",
+      "to": "      if (i < lines.length - 1) {"
+    },
+    {
+      "type": "~",
+      "line": 651,
+      "from": "      }",
+      "to": "        await page.keyboard.down('Shift');"
+    },
+    {
+      "type": "~",
+      "line": 652,
+      "from": "    }",
+      "to": "        await page.keyboard.press('Enter');"
+    },
+    {
+      "type": "~",
+      "line": 653,
+      "from": "",
+      "to": "        await page.keyboard.up('Shift');"
+    },
+    {
+      "type": "~",
+      "line": 654,
+      "from": "    await delay(1000);",
+      "to": "      }"
+    },
+    {
+      "type": "~",
+      "line": 655,
+      "from": "    await page.keyboard.press('Enter');",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 656,
+      "from": "    await delay(3000);",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 657,
+      "from": "",
+      "to": "    await delay(1000);"
+    },
+    {
+      "type": "~",
+      "line": 658,
+      "from": "    log('INFO', '╔════════════════════════════════════╗');",
+      "to": "    await page.keyboard.press('Enter');"
+    },
+    {
+      "type": "~",
+      "line": 659,
+      "from": "    log('INFO', '║  ✅  MESSENGER: GỬI THÀNH CÔNG!   ║');",
+      "to": "    await delay(3000);"
+    },
+    {
+      "type": "~",
+      "line": 660,
+      "from": "    log('INFO', '╚════════════════════════════════════╝');",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 661,
+      "from": "",
+      "to": "    log('INFO', '╔════════════════════════════════════╗');"
+    },
+    {
+      "type": "~",
+      "line": 662,
+      "from": "    await tg(`✅ <b>Đã đăng Facebook!</b>\\n\\n<i>${esc(message.substring(0, 250))}...</i>`);",
+      "to": "    log('INFO', '║  ✅  MESSENGER: GỬI THÀNH CÔNG!   ║');"
+    },
+    {
+      "type": "~",
+      "line": 663,
+      "from": "    await page.close();",
+      "to": "    log('INFO', '╚════════════════════════════════════╝');"
+    },
+    {
+      "type": "~",
+      "line": 664,
+      "from": "    return true;",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 665,
+      "from": "",
+      "to": "    await tg(`✅ <b>Đã đăng Facebook!</b>\\n\\n<i>${esc(message.substring(0, 250))}...</i>`);"
+    },
+    {
+      "type": "~",
+      "line": 666,
+      "from": "  } catch(err) {",
+      "to": "    await page.close();"
+    },
+    {
+      "type": "~",
+      "line": 667,
+      "from": "    log('ERROR', `postToMessenger: ${err.message}`);",
+      "to": "    return true;"
+    },
+    {
+      "type": "~",
+      "line": 668,
+      "from": "    await antigravitySelfFix(err.message, 'postToMessenger');",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 669,
+      "from": "    return false;",
+      "to": "  } catch(err) {"
+    },
+    {
+      "type": "~",
+      "line": 670,
+      "from": "  } finally {",
+      "to": "    log('ERROR', `postToMessenger: ${err.message}`);"
+    },
+    {
+      "type": "~",
+      "line": 671,
+      "from": "    if (browser) { try { await browser.close(); } catch(e) {} }",
+      "to": "    await antigravitySelfFix(err.message, 'postToMessenger');"
+    },
+    {
+      "type": "~",
+      "line": 672,
+      "from": "  }",
+      "to": "    return false;"
+    },
+    {
+      "type": "~",
+      "line": 673,
+      "from": "}",
+      "to": "  } finally {"
+    },
+    {
+      "type": "~",
+      "line": 674,
+      "from": "",
+      "to": "    if (browser) { try { await browser.close(); } catch(e) {} }"
+    },
+    {
+      "type": "~",
+      "line": 675,
+      "from": "// ═══════════════════════════════════════════════════════════",
+      "to": "  }"
+    },
+    {
+      "type": "~",
+      "line": 676,
+      "from": "//  SECTION 12 — PENDING POSTS STORE",
+      "to": "}"
+    },
+    {
+      "type": "~",
+      "line": 677,
+      "from": "// ═══════════════════════════════════════════════════════════",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 678,
+      "from": "",
+      "to": "// ═══════════════════════════════════════════════════════════"
+    },
+    {
+      "type": "~",
+      "line": 679,
+      "from": "const pendingPosts = new Map();",
+      "to": "//  SECTION 12 — PENDING POSTS STORE"
+    },
+    {
+      "type": "~",
+      "line": 680,
+      "from": "let isGenerating = false;",
+      "to": "// ═══════════════════════════════════════════════════════════"
+    },
+    {
+      "type": "~",
+      "line": 681,
+      "from": "const makePendingKey = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 682,
+      "from": "",
+      "to": "const pendingPosts = new Map();"
+    },
+    {
+      "type": "~",
+      "line": 683,
+      "from": "async function generateAndQueue(reason = 'auto') {",
+      "to": "let isGenerating = false;"
+    },
+    {
+      "type": "~",
+      "line": 684,
+      "from": "  if (isGenerating) { await tg('⏳ Đang tạo bài rồi, đợi tí...'); return; }",
+      "to": "const makePendingKey = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);"
+    },
+    {
+      "type": "~",
+      "line": 685,
+      "from": "  isGenerating = true;",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 686,
+      "from": "  log('INFO', `📝 Tạo bài mới (${reason})...`);",
+      "to": "async function generateAndQueue(reason = 'auto') {"
+    },
+    {
+      "type": "~",
+      "line": 687,
+      "from": "  await tg(`🔄 <b>Đang tạo bài mới...</b>\\nLý do: ${reason}`);",
+      "to": "  if (isGenerating) { await tg('⏳ Đang tạo bài rồi, đợi tí...'); return; }"
+    },
+    {
+      "type": "~",
+      "line": 688,
+      "from": "",
+      "to": "  isGenerating = true;"
+    },
+    {
+      "type": "~",
+      "line": 689,
+      "from": "  try {",
+      "to": "  log('INFO', `📝 Tạo bài mới (${reason})...`);"
+    },
+    {
+      "type": "~",
+      "line": 690,
+      "from": "    const post = await generateSEOPost();",
+      "to": "  await tg(`🔄 <b>Đang tạo bài mới...</b>\\nLý do: ${reason}`);"
+    },
+    {
+      "type": "~",
+      "line": 691,
+      "from": "    if (!post) { await tg('❌ AI không tạo được bài! Kiểm tra 9Router.'); return; }",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 692,
+      "from": "",
+      "to": "  try {"
+    },
+    {
+      "type": "~",
+      "line": 693,
+      "from": "    let posterPath = null;",
+      "to": "    const post = await generateSEOPost();"
+    },
+    {
+      "type": "~",
+      "line": 694,
+      "from": "    try { posterPath = await createPoster(post); } catch(e) {}",
+      "to": "    if (!post) { await tg('❌ AI không tạo được bài! Kiểm tra 9Router.'); return; }"
+    },
+    {
+      "type": "~",
+      "line": 696,
+      "from": "    const key = makePendingKey();",
+      "to": "    let posterPath = null;"
+    },
+    {
+      "type": "~",
+      "line": 697,
+      "from": "    pendingPosts.set(key, { content: post, posterPath, ts: Date.now() });",
+      "to": "    try { posterPath = await createPoster(post); } catch(e) {}"
+    },
+    {
+      "type": "~",
+      "line": 699,
+      "from": "    // Gửi poster lên Telegram nếu có",
+      "to": "    const key = makePendingKey();"
+    },
+    {
+      "type": "~",
+      "line": 700,
+      "from": "    if (posterPath) {",
+      "to": "    pendingPosts.set(key, { content: post, posterPath, ts: Date.now() });"
+    },
+    {
+      "type": "~",
+      "line": 701,
+      "from": "      await tgPhoto(posterPath, '🖼️ Preview poster bài viết');",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 702,
+      "from": "    }",
+      "to": "    // Gửi poster lên Telegram nếu có"
+    },
+    {
+      "type": "~",
+      "line": 703,
+      "from": "",
+      "to": "    if (posterPath) {"
+    },
+    {
+      "type": "~",
+      "line": 704,
+      "from": "    // Gửi bài để duyệt",
+      "to": "      await tgPhoto(posterPath, '🖼️ Preview poster bài viết');"
+    },
+    {
+      "type": "~",
+      "line": 705,
+      "from": "    await tgApproval(post, key);",
+      "to": "    }"
+    },
+    {
+      "type": "~",
+      "line": 706,
+      "from": "    log('INFO', `📤 Bài ${key} đang chờ duyệt`);",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 707,
+      "from": "",
+      "to": "    // Gửi bài để duyệt"
+    },
+    {
+      "type": "~",
+      "line": 708,
+      "from": "    // Hết hạn sau 60 phút",
+      "to": "    await tgApproval(post, key);"
+    },
+    {
+      "type": "~",
+      "line": 709,
+      "from": "    setTimeout(() => {",
+      "to": "    log('INFO', `📤 Bài ${key} đang chờ duyệt`);"
+    },
+    {
+      "type": "~",
+      "line": 710,
+      "from": "      if (pendingPosts.has(key)) {",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 711,
+      "from": "        pendingPosts.delete(key);",
+      "to": "    // Hết hạn sau 60 phút"
+    },
+    {
+      "type": "~",
+      "line": 712,
+      "from": "        log('INFO', `🗑️ Bài ${key} hết hạn (60 phút)`);",
+      "to": "    setTimeout(() => {"
+    },
+    {
+      "type": "~",
+      "line": 713,
+      "from": "      }",
+      "to": "      if (pendingPosts.has(key)) {"
+    },
+    {
+      "type": "~",
+      "line": 714,
+      "from": "    }, 60 * 60 * 1000);",
+      "to": "        pendingPosts.delete(key);"
+    },
+    {
+      "type": "~",
+      "line": 715,
+      "from": "",
+      "to": "        log('INFO', `🗑️ Bài ${key} hết hạn (60 phút)`);"
+    },
+    {
+      "type": "~",
+      "line": 716,
+      "from": "  } catch(err) {",
+      "to": "      }"
+    },
+    {
+      "type": "~",
+      "line": 717,
+      "from": "    log('ERROR', `generateAndQueue: ${err.message}`);",
+      "to": "    }, 60 * 60 * 1000);"
+    },
+    {
+      "type": "~",
+      "line": 718,
+      "from": "    await antigravitySelfFix(err.message, 'generateAndQueue');",
+      "to": ""
+    },
+    {
+      "type": "~",
+      "line": 719,
+      "from": "  } finally {",
+      "to": "  } catch(err) {"
+    },
+    {
+      "type": "~",
+      "line": 720,
+      "from": "    isGenerating = false;",
+      "to": "    log('ERROR', `generateAndQueue: ${err.message}`);"
+    },
+    {
+      "type": "~",
+      "line": 721,
+      "from": "  }",
+      "to": "    await antigravitySelfFix(err.message, 'generateAndQueue');"
+    },
+    {
+      "type": "~",
+      "line": 722,
+      "from": "}",
+      "to": "  } finally {"
+    },
+    {
+      "type": "~",
+      "line": 723,
+      "from": "",
+      "to": "    isGenerating = false;"
+    },
+    {
+      "type": "~",
+      "line": 724,
+      "from": "// ═══════════════════════════════════════════════════════════",
+      "to": "  }"
+    }
+  ]
+}

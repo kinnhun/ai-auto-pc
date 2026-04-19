@@ -1,827 +1,230 @@
-[06:10:00 19/4/2026] [INFO] ⏳ Task đầu tiên sẽ chạy sau 5 phút...
-[06:10:00 19/4/2026] [INFO] 💡 Hoặc gửi yêu cầu qua Messenger để bot thực thi ngay!
-[06:10:00 19/4/2026] [INFO] 
-[06:10:00 19/4/2026] [INFO] 📝 Các lệnh hỗ trợ qua chat:
-[06:10:00 19/4/2026] [INFO]    • "viết bài" / "đăng bài" → Tạo & gửi bài mới
-[06:10:00 19/4/2026] [INFO]    • "trending" → Xem top trending
-[06:10:00 19/4/2026] [INFO]    • "status" → Xem trạng thái bot
-[06:10:00 19/4/2026] [INFO]    • Bất kỳ câu hỏi → AI sẽ trả lời
-[06:10:00 19/4/2026] [INFO] 
-[06:10:00 19/4/2026] [INFO] 👂 Đang thiết lập Chat Monitor...
-[06:10:00 19/4/2026] [INFO] [Chrome] Kết nối Chrome...
-[06:10:00 19/4/2026] [INFO]    Thử kết nối Chrome... (1/2)
-[06:10:02 19/4/2026] [INFO]    Thử kết nối Chrome... (2/2)
-[06:10:04 19/4/2026] [INFO] [Chrome] Khởi động lại Chrome...
-[06:10:04 19/4/2026] [INFO] [Chrome] Path: C:\Program Files\Google\Chrome\Application\chrome.exe
-[06:10:08 19/4/2026] [INFO] [Chrome] Khởi động Chrome debug port 9222...
-[06:10:13 19/4/2026] [INFO]    Thử kết nối Chrome... (1/5)
-[06:10:15 19/4/2026] [INFO]    Thử kết nối Chrome... (2/5)
-[06:10:17 19/4/2026] [INFO]    Thử kết nối Chrome... (3/5)
-[06:10:19 19/4/2026] [INFO]    Thử kết nối Chrome... (4/5)
-[06:10:21 19/4/2026] [INFO]    Thử kết nối Chrome... (5/5)
-[06:10:23 19/4/2026] [ERROR] ❌ Chat Monitor lỗi: Không thể kết nối Chrome!
-[06:15:00 19/4/2026] [INFO] ⏰ 5 phút đã qua, bắt đầu auto-post!
-[06:15:00 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:15:00 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:15:00 19/4/2026
-[06:15:00 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:15:00 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:15:04 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:15:04 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:15:14 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:15:31 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:15:31 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:15:31 19/4/2026
-[06:15:31 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:15:31 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:15:34 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:15:34 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:15:45 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:16:47 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:16:47 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối 9Router để phân tích lỗi...
-[06:16:49 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:16:49 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối 9Router để phân tích lỗi...
-[06:16:54 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:16:54 19/4/2026] [INFO] 1. **Nguyên nhân chính:** `browser`/`page` trong Puppeteer đã bị mất (browser crash, bị đóng, hoặc disconnect), nên khi bot gọi lấy tab hiện tại thì nhận `null/undefined` và ném lỗi `Unable to get browser page`.
-
-2. **Giải pháp cụ thể:**
-- Trước khi dùng `page`, luôn check `if (!browser?.isConnected())` và khởi tạo lại browser.
-- Nếu `page` null/closed (`page.isClosed()`), tạo mới bằng `await browser.newPage()`.
-- Bọc luồng chính bằng `try/catch` + handler `browser.on('disconnected', ...)` để auto reconnect.
-- Tránh unhandled promise: thêm `.catch()` hoặc `process.on('unhandledRejection', ...)` để log và recovery.
-
-3. **Có cần restart không?** **YES** (ít nhất restart tiến trình bot/browser để khôi phục ngay; sau đó thêm auto-reconnect để không phải restart thủ công).
-[06:16:54 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:16:54 19/4/2026] [INFO] 🔄 Auto-restart lần 1/3...
-[06:16:54 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:16:54 19/4/2026] [INFO] 1. **Nguyên nhân chính:** `browser` hoặc `page` trong Puppeteer đã bị đóng/crash/disconnect nhưng code vẫn gọi dùng tiếp, nên hàm lấy page trả về `null/undefined` và ném `Unable to get browser page`.
-
-2. **Giải pháp cụ thể:**
-- Bọc đoạn lấy page bằng guard: nếu `!browser || !browser.isConnected()` thì `launch()` lại browser.
-- Nếu `!page || page.isClosed()` thì tạo `await browser.newPage()` và gán lại.
-- Thêm handler `browser.on('disconnected', ...)` để auto re-init.
-- Bắt lỗi toàn cục `unhandledRejection` + retry có giới hạn, tránh bot chết im lặng.
-
-3. **Có cần restart không?** **YES** (ít nhất restart phiên browser; nếu bot không có cơ chế tự recover thì restart process luôn).
-[06:16:54 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:16:54 19/4/2026] [INFO] 🔄 Auto-restart lần 2/3...
-[06:17:00 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 2)
-[06:17:00 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[06:17:00 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:17:00 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:17:00 19/4/2026
-[06:17:00 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:17:00 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:17:04 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:17:04 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:17:12 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:17:44 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:17:44 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối 9Router để phân tích lỗi...
-[06:17:51 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:17:51 19/4/2026] [INFO] 1. Nguyên nhân chính: `browser/page` đã bị đóng hoặc chưa khởi tạo xong (launch/login fail, timeout, crash), nên hàm lấy page trả về `null/undefined` và ném `Unable to get browser page`. `unhandledRejection` cho thấy promise lỗi không được `try/catch`.
-
-2. Giải pháp cụ thể:
-- Bọc toàn bộ luồng lấy page bằng `try/catch` + handler `process.on('unhandledRejection', ...)`.
-- Trước khi dùng, kiểm tra lại trạng thái: `if (!browser || !browser.isConnected()) relaunch`; `if (!page || page.isClosed()) page = await browser.newPage()`.
-- Thêm retry có delay (2–3 lần) cho bước launch/get page/login.
-- Log rõ nguyên nhân gốc (timeout, auth fail, target closed) để tránh fail mù.
-
-3. Có cần restart không? **YES**.
-[06:17:51 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:17:51 19/4/2026] [INFO] 🔄 Auto-restart lần 3/3...
-[06:17:55 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 3)
-[06:17:55 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[06:17:55 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:17:55 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:17:55 19/4/2026
-[06:17:55 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:17:55 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:17:57 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:17:57 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:18:07 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:18:30 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:18:30 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối 9Router để phân tích lỗi...
-[06:18:36 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:18:36 19/4/2026] [INFO] 1. **Nguyên nhân chính:** `browser` hoặc `page` chưa được khởi tạo đúng (hoặc đã bị đóng/crash) nhưng code vẫn gọi `browser.pages()` / thao tác trên `page`, nên ném lỗi `Unable to get browser page`.
-
-2. **Giải pháp cụ thể:**
-- Bọc toàn bộ luồng Puppeteer bằng `try/catch`, kiểm tra `if (!browser?.isConnected() || !page || page.isClosed())` trước khi dùng.
-- Đảm bảo thứ tự init chuẩn: `launch -> newPage/pages[0] -> setViewport/login...`; không dùng `page` ở scope async khác khi chưa `await`.
-- Thêm handler tự phục hồi: khi `disconnected`/`targetdestroyed` thì re-init browser + page.
-- Tránh đóng sớm (`browser.close()`/`page.close()`) ở finally khi job khác còn chạy.
-
-3. **Có cần restart không?** **YES** (nếu tiến trình hiện tại đã mất `browser/page` thì cần restart hoặc re-init ngay trong code).
-[06:18:36 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:18:36 19/4/2026] [ERROR] ⛔ Đã restart 3 lần, dừng auto-restart để tránh loop.
-[06:49:52 19/4/2026] [INFO] ⏳ Task đầu tiên sẽ chạy sau 5 phút...
-[06:49:53 19/4/2026] [INFO] 💡 Hoặc gửi yêu cầu qua Messenger để bot thực thi ngay!
-[06:49:53 19/4/2026] [INFO] 
-[06:49:53 19/4/2026] [INFO] 📝 Các lệnh hỗ trợ qua chat:
-[06:49:53 19/4/2026] [INFO]    • "viết bài" / "đăng bài" → Tạo & gửi bài mới
-[06:49:53 19/4/2026] [INFO]    • "trending" → Xem top trending
-[06:49:53 19/4/2026] [INFO]    • "status" → Xem trạng thái bot
-[06:49:53 19/4/2026] [INFO]    • Bất kỳ câu hỏi → AI sẽ trả lời
-[06:49:53 19/4/2026] [INFO] 
-[06:49:53 19/4/2026] [INFO] 👂 Đang thiết lập Chat Monitor...
-[06:49:53 19/4/2026] [INFO]    Lần thử 1/3...
-[06:49:53 19/4/2026] [INFO] [Chrome] Kết nối Chrome...
-[06:49:53 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/2)
-[06:49:56 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/2)
-[06:50:01 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/2)
-[06:50:04 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/2)
-[06:50:09 19/4/2026] [INFO] [Chrome] Không có Chrome debug nào, khởi động mới...
-[06:50:09 19/4/2026] [INFO] [Chrome] Path: C:\Program Files\Google\Chrome\Application\chrome.exe
-[06:50:09 19/4/2026] [INFO] [Chrome] Kiểm tra Chrome hiện có trên port 9222...
-[06:50:09 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/2)
-[06:50:12 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/2)
-[06:50:17 19/4/2026] [INFO] [Chrome] Kiểm tra bot Chrome trên port 9223...
-[06:50:17 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/2)
-[06:50:20 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/2)
-[06:50:25 19/4/2026] [INFO] [Chrome] Khởi động Chrome mới cho bot...
-[06:50:25 19/4/2026] [INFO] [Chrome] Khởi động Chrome debug port 9223 (bot instance)...
-[06:50:33 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/8)
-[06:50:36 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/8)
-[06:50:41 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (3/8)
-[06:50:48 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (4/8)
-[06:50:57 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (5/8)
-[06:51:07 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (6/8)
-[06:51:17 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (7/8)
-[06:51:27 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (8/8)
-[06:51:37 19/4/2026] [WARN] [Chrome] Bot instance thất bại, thử dùng profile gốc...
-[06:51:44 19/4/2026] [INFO] [Chrome] Khởi động Chrome debug port 9222 (profile gốc)...
-[06:51:53 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/8)
-[06:51:56 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/8)
-[06:52:01 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (3/8)
-[06:52:08 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (4/8)
-[06:52:17 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (5/8)
-[06:52:27 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (6/8)
-[06:52:37 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (7/8)
-[06:52:47 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (8/8)
-[06:52:57 19/4/2026] [ERROR] ❌ Không thể kết nối Chrome sau tất cả các cách!
-[06:52:57 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[06:53:14 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:53:14 19/4/2026] [INFO] 1. **Nguyên nhân chính (1-2 dòng)**  
-Chrome thực tế **không mở được DevTools port 9222/9223** (thường do profile đang bị lock, port đã bị chiếm, hoặc lệnh launch qua `shell: true` bị lỗi quote trên Windows).  
-Vì vậy `tryConnectChrome()` luôn fail dù có retry.
-
-2. **Giải pháp cụ thể (code fix nếu cần)**  
-- Luôn mở Chrome với **profile riêng cho bot** + bind debug address rõ ràng `127.0.0.1`.  
-- Bỏ `shell: true`, tăng thời gian chờ khởi động 8s -> 12s.
-
-[CODE_FIX]
-file: bot.js  
-find: `], { detached: true, stdio: 'ignore', shell: true });`  
-replace: `], { detached: true, stdio: 'ignore', windowsHide: true, shell: false });`
-[/CODE_FIX]
-
-[CODE_FIX]
-file: bot.js  
-find: `await delay(8000);`  
-replace: `await delay(12000);`
-[/CODE_FIX]
-
-> Nếu chưa có trong args khi launch Chrome, thêm bắt buộc:  
-`--remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir=C:\fb-bot-chrome-profile`
-
-3. **Lệnh CMD để khắc phục (nếu có)**
-
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-netstat -ano | findstr :9222
-netstat -ano | findstr :9223
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="C:\fb-bot-chrome-profile" --no-first-run --no-default-browser-check
-curl http://127.0.0.1:9222/json/version
-[/CMD_FIX]
-
-4. **Có cần restart bot không?**  
-**YES**. Sau khi kill Chrome + mở lại debug Chrome (hoặc sửa code), cần restart bot để kết nối lại clean.
-[06:53:14 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-netstat -ano | findstr :9222
-netstat -ano | findstr :9223
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="C:\fb-bot-chrome-profile" --no-first-run --no-default-browser-check
-curl http://127.0.0.1:9222/json/version
-[06:53:15 19/4/2026] [WARN] ⚠️ Lệnh fix lỗi: Command failed: taskkill /F /IM chrome.exe
-netstat -ano | findstr :9222
-netstat -ano | findstr :9223
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="C:\fb-bot-chrome-profile" --no-first-run --no-default-browser-check
-curl http://127.0.0.1:9222/json/version
-ERROR: The process "chrome.exe" not found.
-
-[06:53:15 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:53:15 19/4/2026] [INFO] 🔄 Auto-restart lần 1/3...
-[06:53:15 19/4/2026] [ERROR] ❌ Chat Monitor lỗi (lần 1): Không thể kết nối Chrome sau tất cả các cách!
-[06:53:15 19/4/2026] [INFO]    Đợi 10s rồi thử lại...
-[06:53:21 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 1)
-[06:53:21 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[06:53:21 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:53:21 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:53:21 19/4/2026
-[06:53:21 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:53:21 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:53:25 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:53:25 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:53:38 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:54:15 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:54:15 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[06:54:28 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:54:28 19/4/2026] [INFO] 1) **Nguyên nhân chính**  
-- Chrome remote debugging (9222/9223) không có tab/page sẵn hoặc port bị chiếm/sai instance, nên `browser.pages()` trả rỗng và ném `Error: Unable to get browser page`.  
-- Lỗi này bị đẩy lên `unhandledRejection` vì chưa có fallback tạo page mới.
-
-2) **Giải pháp cụ thể**  
-- Khi connect Puppeteer: kiểm tra `browser.pages()`, nếu rỗng thì `browser.newPage()` hoặc chờ `targetcreated` rồi lấy page.  
-- Đảm bảo chỉ 1 Chrome chạy đúng `--remote-debugging-port` + `--user-data-dir` riêng.
-
-[CODE_FIX]
-file: bot.js  
-find: `const page = (await browser.pages())[0]; if (!page) throw new Error('Unable to get browser page');`  
-replace: `let pages = await browser.pages(); let page = pages[0]; if (!page) { try { page = await browser.newPage(); } catch (_) {} } if (!page) { const target = await browser.waitForTarget(t => t.type() === 'page', { timeout: 10000 }).catch(() => null); page = target ? await target.page() : null; } if (!page) throw new Error('Unable to get browser page');`
-[/CODE_FIX]
-
-3) **Lệnh CMD để khắc phục**  
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-rmdir /S /Q "%TEMP%\fb-bot-chrome"
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\fb-bot-chrome" --no-first-run --no-default-browser-check
-netstat -ano | findstr :9222
-[/CMD_FIX]
-
-4) **Có cần restart bot không?**  
-**YES**. Sau khi relaunch Chrome debug đúng port và áp dụng fix fallback page, restart bot để reconnect sạch.
-[06:54:28 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-rmdir /S /Q "%TEMP%\fb-bot-chrome"
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\fb-bot-chrome" --no-first-run --no-default-browser-check
-netstat -ano | findstr :9222
-[06:54:28 19/4/2026] [INFO] ✅ Lệnh fix đã chạy thành công!
-[06:54:28 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:54:28 19/4/2026] [INFO] 🔄 Auto-restart lần 2/3...
-[06:54:32 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 2)
-[06:54:32 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[06:54:32 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:54:32 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:54:32 19/4/2026
-[06:54:32 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:54:32 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:54:35 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:54:35 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:54:47 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:55:24 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:55:24 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[06:55:36 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:55:36 19/4/2026] [INFO] 1. **Nguyên nhân chính (1-2 dòng)**  
-Bot đang `puppeteer.connect()` vào Chrome debug port nhưng không lấy được `page` (Chrome chưa mở đúng `--remote-debugging-port`, sai port 9222/9223, hoặc `browser.pages()` rỗng rồi bị `throw "Unable to get browser page"`).  
-
-2. **Giải pháp cụ thể**  
-- Ưu tiên: đảm bảo Chrome chạy đúng debug port và bot retry 9222/9223.  
-- Fix code để khi `pages()` rỗng thì tự `newPage()` thay vì throw ngay.
-
-[CODE_FIX]
-file: bot.js  
-find: `throw new Error('Unable to get browser page');`  
-replace:
-```js
-// Thử lấy page hiện có, nếu không có thì tạo page mới
-let pages = await browser.pages();
-let page = pages.find(p => !p.isClosed()) || null;
-
-if (!page) {
-  page = await browser.newPage();
-}
-
-if (!page || page.isClosed()) {
-  throw new Error('Unable to get browser page');
-}
-
-return page;
-```
-[/CODE_FIX]
-
-3. **Lệnh CMD để khắc phục**  
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[/CMD_FIX]
-
-(Nếu bot đang cấu hình 9223 thì đổi `9222` thành `9223` cho đồng bộ.)
-
-4. **Có cần restart bot không?**  
-**YES**.  
-Sau khi mở lại Chrome debug đúng port (và sửa code nếu có), cần restart bot để reconnect sạch.
-[06:55:36 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[06:55:37 19/4/2026] [INFO] ✅ Lệnh fix đã chạy thành công!
-[06:55:37 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:55:37 19/4/2026] [INFO] 🔄 Auto-restart lần 3/3...
-[06:55:42 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 3)
-[06:55:42 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[06:55:42 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[06:55:42 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 06:55:42 19/4/2026
-[06:55:42 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[06:55:42 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[06:55:44 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[06:55:44 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[06:55:53 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[06:56:24 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[06:56:24 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[06:56:38 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[06:56:38 19/4/2026] [INFO] 1) **Nguyên nhân chính**  
-- Bot connect vào Chrome debug port (`9222/9223`) nhưng endpoint chưa sẵn sàng/sai port, hoặc Chrome không có tab nào đang mở ⇒ `browser.pages()` rỗng và code ném `Error: Unable to get browser page`.  
-- Lỗi này rơi vào Promise không được catch đúng chỗ nên bị đẩy lên `unhandledRejection`.
-
-2) **Giải pháp cụ thể**  
-- Sau khi `puppeteer.connect(...)`, nếu không có page thì tự `browser.newPage()` thay vì throw ngay.  
-- Thêm retry ngắn khi connect/page lấy thất bại.
-
-[CODE_FIX]
-file: bot.js  
-find: 
-```js
-const pages = await browser.pages();
-if (!pages || pages.length === 0) {
-  throw new Error('Unable to get browser page');
-}
-const page = pages[0];
-return page;
-```
-replace:
-```js
-const pages = await browser.pages();
-let page = pages && pages.length ? pages[0] : null;
-
-// Chrome debug có thể chưa có tab nào, tạo tab mới thay vì crash
-if (!page) {
-  page = await browser.newPage();
-}
-
-if (!page) {
-  throw new Error('Unable to get browser page (no pages and cannot create new page)');
-}
-return page;
-```
-[/CODE_FIX]
-
-3) **Lệnh CMD để khắc phục**  
-[CMD_FIX]
-```cmd
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot" --no-first-run --no-default-browser-check https://facebook.com
-```
-[/CMD_FIX]
-
-4) **Có cần restart bot không?**  
-- **YES** (sau khi restart Chrome debug mode, cần restart bot để reconnect sạch).
-[06:56:38 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: ```cmd
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot" --no-first-run --no-default-browser-check https://facebook.com
-```
-[06:56:38 19/4/2026] [WARN] ⚠️ Lệnh fix lỗi: Command failed: ```cmd
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot" --no-first-run --no-default-browser-check https://facebook.com
-```
-'```cmd' is not recognized as an internal or external command,
-operable program or batch file.
-
-[06:56:38 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[06:56:38 19/4/2026] [ERROR] ⛔ Đã restart 3 lần, dừng auto-restart để tránh loop.
-[08:07:31 19/4/2026] [INFO] ⏳ Task đầu tiên sẽ chạy sau 5 phút...
-[08:07:31 19/4/2026] [INFO] 💡 Hoặc gửi yêu cầu qua Messenger để bot thực thi ngay!
-[08:07:31 19/4/2026] [INFO] 
-[08:07:31 19/4/2026] [INFO] 📝 Các lệnh hỗ trợ qua chat:
-[08:07:31 19/4/2026] [INFO]    • "viết bài" / "đăng bài" → Tạo & gửi bài mới
-[08:07:31 19/4/2026] [INFO]    • "trending" → Xem top trending
-[08:07:31 19/4/2026] [INFO]    • "status" → Xem trạng thái bot
-[08:07:31 19/4/2026] [INFO]    • Bất kỳ câu hỏi → AI sẽ trả lời
-[08:07:31 19/4/2026] [INFO] 
-[08:07:31 19/4/2026] [INFO] 👂 Đang thiết lập Chat Monitor...
-[08:07:31 19/4/2026] [INFO]    Lần thử 1/3...
-[08:07:31 19/4/2026] [INFO] [Chrome] Kết nối Chrome...
-[08:07:31 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/2)
-[08:07:34 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/2)
-[08:07:39 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/2)
-[08:07:42 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/2)
-[08:07:47 19/4/2026] [INFO] [Chrome] Không có Chrome debug nào, khởi động mới...
-[08:07:47 19/4/2026] [INFO] [Chrome] Path: C:\Program Files\Google\Chrome\Application\chrome.exe
-[08:07:47 19/4/2026] [INFO] [Chrome] Kiểm tra Chrome hiện có trên port 9222...
-[08:07:47 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/2)
-[08:07:50 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/2)
-[08:07:55 19/4/2026] [INFO] [Chrome] Kiểm tra bot Chrome trên port 9223...
-[08:07:55 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/2)
-[08:07:58 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/2)
-[08:08:03 19/4/2026] [INFO] [Chrome] Khởi động Chrome mới cho bot...
-[08:08:03 19/4/2026] [INFO] [Chrome] Khởi động Chrome debug port 9223 (bot instance)...
-[08:08:11 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (1/8)
-[08:08:14 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (2/8)
-[08:08:19 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (3/8)
-[08:08:26 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (4/8)
-[08:08:35 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (5/8)
-[08:08:45 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (6/8)
-[08:08:55 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (7/8)
-[08:09:05 19/4/2026] [INFO]    Thử kết nối Chrome port 9223... (8/8)
-[08:09:15 19/4/2026] [WARN] [Chrome] Bot instance thất bại, thử dùng profile gốc...
-[08:09:20 19/4/2026] [INFO] [Chrome] Khởi động Chrome debug port 9222 (profile gốc)...
-[08:09:28 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (1/8)
-[08:09:31 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (2/8)
-[08:09:36 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (3/8)
-[08:09:43 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (4/8)
-[08:09:52 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (5/8)
-[08:10:02 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (6/8)
-[08:10:12 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (7/8)
-[08:10:22 19/4/2026] [INFO]    Thử kết nối Chrome port 9222... (8/8)
-[08:10:32 19/4/2026] [ERROR] ❌ Không thể kết nối Chrome sau tất cả các cách!
-[08:10:32 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[08:10:50 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[08:10:50 19/4/2026] [INFO] 1. **Nguyên nhân chính (1-2 dòng)**  
-Chrome debug thực tế **không lên được cổng 9222/9223** (thường do launch bằng `shell: true` trên Windows + profile/port bị kẹt), nên `puppeteer.connect()` retry bao nhiêu cũng fail.
-
-2. **Giải pháp cụ thể**  
-- Launch Chrome theo kiểu ổn định trên Windows: bỏ `shell: true`, ép `--remote-debugging-address=127.0.0.1`, dùng `--user-data-dir` riêng cho từng port.  
-- Tăng thời gian chờ/retry sau khi spawn Chrome (Windows thường cần >8s).
-
-[CODE_FIX]
-file: bot.js  
-find: ], { detached: true, stdio: 'ignore', shell: true });
-replace: ], { detached: true, stdio: 'ignore', shell: false });
-[/CODE_FIX]
-
-[CODE_FIX]
-file: bot.js  
-find: await delay(8000);
-replace: await delay(15000);
-[/CODE_FIX]
-
-[CODE_FIX]
-file: bot.js  
-find: browser = await tryConnectChrome(8, 9222);
-replace: browser = await tryConnectChrome(15, 9222);
-[/CODE_FIX]
-
-> Nếu trong args launch Chrome chưa có, thêm 2 flag này:  
-`--remote-debugging-address=127.0.0.1`  
-`--user-data-dir=<thư_mục_riêng_theo_port>`
-
-3. **Lệnh CMD để khắc phục**
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-rmdir /S /Q "%TEMP%\fbbot-chrome-9222"
-rmdir /S /Q "%TEMP%\fbbot-chrome-9223"
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="%TEMP%\fbbot-chrome-9222" --no-first-run --no-default-browser-check
-[/CMD_FIX]
-
-4. **Có cần restart bot không?**  
-**YES**. Sau khi kill Chrome + sửa code, cần restart bot để nạp flow kết nối mới.
-[08:10:50 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-rmdir /S /Q "%TEMP%\fbbot-chrome-9222"
-rmdir /S /Q "%TEMP%\fbbot-chrome-9223"
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="%TEMP%\fbbot-chrome-9222" --no-first-run --no-default-browser-check
-[08:10:50 19/4/2026] [WARN] ⚠️ Lệnh fix lỗi: Command failed: taskkill /F /IM chrome.exe
-rmdir /S /Q "%TEMP%\fbbot-chrome-9222"
-rmdir /S /Q "%TEMP%\fbbot-chrome-9223"
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="%TEMP%\fbbot-chrome-9222" --no-first-run --no-default-browser-check
-ERROR: The process "chrome.exe" not found.
-
-[08:10:50 19/4/2026] [INFO] ✅ [AUTO-FIX] Code đã được sửa tự động!
-[08:10:50 19/4/2026] [INFO]    Find: ], { detached: true, stdio: 'ignore', shell: true });
-[08:10:50 19/4/2026] [INFO]    Replace: ], { detached: true, stdio: 'ignore', shell: false });
-[08:10:50 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[08:10:50 19/4/2026] [INFO] 🔄 Auto-restart lần 1/3...
-[08:10:50 19/4/2026] [ERROR] ❌ Chat Monitor lỗi (lần 1): Không thể kết nối Chrome sau tất cả các cách!
-[08:10:50 19/4/2026] [INFO]    Đợi 10s rồi thử lại...
-[08:10:51 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 1)
-[08:10:51 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[08:10:51 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[08:10:51 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 08:10:51 19/4/2026
-[08:10:51 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[08:10:51 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[08:10:53 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[08:10:53 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[08:11:01 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[08:11:07 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:11:07 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[08:11:17 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[08:11:17 19/4/2026] [INFO] 1. **Nguyên nhân chính**  
-`puppeteer.connect()` đã nối được Chrome nhưng không lấy được tab khả dụng (`browser.pages()` rỗng / tab bị đóng), thường do Chrome mở sai debug port (9222 vs 9223) hoặc instance Chrome hiện tại không bật `--remote-debugging-port` đúng cổng bot đang dùng.
-
-2. **Giải pháp cụ thể**  
-- Đồng bộ **1 cổng duy nhất** giữa config bot và Chrome debug port.  
-- Sau khi `connect`, nếu không có page thì **tạo page mới fallback** thay vì throw ngay.
-
-[CODE_FIX]
-file: bot.js  
-find: const pages = await browser.pages();
-replace: const pages = await browser.pages().catch(() => []);
-[/CODE_FIX]
-
-[CODE_FIX]
-file: bot.js  
-find: if (!pages || !pages.length) throw new Error('Unable to get browser page');
-replace: if (!pages.length) { const p = await browser.newPage(); page = p; } else { page = pages[0]; }
-[/CODE_FIX]
-
-3. **Lệnh CMD để khắc phục**  
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[/CMD_FIX]
-
-4. **Có cần restart bot không?**  
-**YES** (sau khi mở lại Chrome đúng debug port, restart bot để reconnect sạch).
-[08:11:17 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[08:11:17 19/4/2026] [INFO] ✅ Lệnh fix đã chạy thành công!
-[08:11:17 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[08:11:17 19/4/2026] [INFO] 🔄 Auto-restart lần 2/3...
-[08:11:19 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 2)
-[08:11:19 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[08:11:19 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[08:11:19 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 08:11:19 19/4/2026
-[08:11:19 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[08:11:19 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[08:11:22 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[08:11:22 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[08:11:30 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[08:11:35 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:11:35 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[08:11:52 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[08:11:52 19/4/2026] [INFO] 1) **Nguyên nhân chính**  
-- Chrome instance gắn qua `puppeteer.connect()` không có tab khả dụng (hoặc tab bị đóng), nên hàm lấy page trả `null` và ném `Error: Unable to get browser page`.  
-- Port debug `9222/9223` có thể không đúng instance Chrome đang chạy (stale session), gây reject ở nhánh async và rơi vào `unhandledRejection`.
-
-2) **Giải pháp cụ thể**  
-- Khi connect xong: luôn fallback `browser.newPage()` nếu `browser.pages()` rỗng, và kiểm tra `browser.isConnected()` trước khi lấy page.  
-- Bọc try/catch tại chỗ gọi lấy page để không văng ra `unhandledRejection`.
-
-[CODE_FIX]
-file: bot.js  
-find: `throw new Error('Unable to get browser page');`  
-replace:
-```js
-// Fallback an toàn: nếu không có tab thì tự mở tab mới
-const pages = await browser.pages();
-let page = pages.find(p => !p.isClosed());
-
-if (!page) {
-  page = await browser.newPage();
-}
-
-if (!page || page.isClosed()) {
-  throw new Error('Unable to get browser page');
-}
-```
-[/CODE_FIX]
-
-3) **Lệnh CMD để khắc phục**
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\chrome-debug-9222"
-[/CMD_FIX]
-
-4) **Có cần restart bot không?**  
-**YES** (cần restart sau khi relaunch Chrome debug và áp dụng fix).
-[08:11:52 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\chrome-debug-9222"
-[08:11:52 19/4/2026] [INFO] ✅ Lệnh fix đã chạy thành công!
-[08:11:52 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[08:11:52 19/4/2026] [INFO] 🔄 Auto-restart lần 3/3...
-[08:11:55 19/4/2026] [INFO] 🔄 Đã restart từ auto-fix (lần 3)
-[08:11:55 19/4/2026] [INFO] 🔄 Restart detected → Chạy task ngay!
-[08:11:55 19/4/2026] [INFO] 
-═══════════════════════════════════════════════════════
-[08:11:55 19/4/2026] [INFO] 🕒 VÒNG LẶP MỚI: 08:11:55 19/4/2026
-[08:11:55 19/4/2026] [INFO] ═══════════════════════════════════════════════════════
-[08:11:55 19/4/2026] [INFO] 📡 Đang thu thập trending content...
-[08:11:57 19/4/2026] [INFO] 📊 Thu thập được 10 bài trending
-[08:11:57 19/4/2026] [INFO] 🤖 Đang gọi AI tạo bài viết...
-[08:12:06 19/4/2026] [INFO] ✅ OpenAI Codex đã tạo bài viết!
-[08:12:11 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:12:11 19/4/2026] [INFO] 
-🔍 [AUTO-FIX] Đang kết nối AI (Antigravity/Codex) để phân tích lỗi...
-[08:12:24 19/4/2026] [INFO] 🤖 [AI DEBUG via OpenAI Codex]:
-[08:12:24 19/4/2026] [INFO] 1) Nguyên nhân chính  
-- Bot connect vào Chrome debug port nhưng không lấy được tab/page hợp lệ (thường do sai port 9222/9223, Chrome chưa mở với `--remote-debugging-port`, hoặc `browser.pages()` rỗng nên code ném `Unable to get browser page`).
-
-2) Giải pháp cụ thể  
-- Chuẩn hoá 1 debug port duy nhất (khuyên dùng 9222), mở Chrome với profile riêng, và sửa đoạn lấy page để fallback `newPage()` thay vì throw ngay.
-
-[CODE_FIX]
-file: bot.js  
-find: `throw new Error('Unable to get browser page');`  
-replace: `const pages = await browser.pages(); const page = pages.find(p => !p.isClosed()) || await browser.newPage(); return page;`
-[/CODE_FIX]
-
-3) Lệnh CMD để khắc phục  
-[CMD_FIX]
-taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[/CMD_FIX]
-
-4) Có cần restart bot không?  
-- YES (sau khi relaunch Chrome debug).
-[08:12:24 19/4/2026] [INFO] 🔧 [AUTO-FIX] Chạy lệnh: taskkill /F /IM chrome.exe
-start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome-debug-bot"
-[08:12:24 19/4/2026] [INFO] ✅ Lệnh fix đã chạy thành công!
-[08:12:24 19/4/2026] [INFO] 🔄 AI khuyến nghị RESTART → Thực hiện auto-restart...
-[08:12:24 19/4/2026] [ERROR] ⛔ Đã restart 3 lần, dừng auto-restart để tránh loop.
-[08:12:43 19/4/2026] [INFO] ✅ 9Router ONLINE
-[08:12:44 19/4/2026] [INFO] ⏳ Task đầu tiên sau 5 phút...
-[08:12:44 19/4/2026] [INFO] 💡 Mẹo: Gửi "chạy ngay" qua Messenger để kích hoạt tức thì
-[08:12:44 19/4/2026] [INFO] ✅ Bot đã sẵn sàng hoạt động!
-[08:12:59 19/4/2026] [INFO] ✅ 9Router ONLINE
-[08:12:59 19/4/2026] [INFO] ⏳ Task đầu tiên sau 5 phút...
-[08:12:59 19/4/2026] [INFO] 💡 Mẹo: Gửi "chạy ngay" qua Messenger để kích hoạt tức thì
-[08:12:59 19/4/2026] [INFO] ✅ Bot đã sẵn sàng hoạt động!
-[08:16:06 19/4/2026] [WARN] [TG] sendMessage thất bại: Bad Request: chat not found
-[08:16:06 19/4/2026] [INFO] 👂 Telegram polling BẬT
-[08:16:06 19/4/2026] [INFO] ⏳ Lần tạo bài đầu tiên sau 5 phút...
-[08:16:06 19/4/2026] [INFO] ✅ Bot sẵn sàng! Nhắn lệnh qua Telegram để điều khiển.
-[08:16:14 19/4/2026] [WARN] [TG] sendMessage thất bại: Bad Request: chat not found
-[08:16:14 19/4/2026] [INFO] 👂 Telegram polling BẬT
-[08:16:14 19/4/2026] [INFO] ⏳ Lần tạo bài đầu tiên sau 5 phút...
-[08:16:14 19/4/2026] [INFO] ✅ Bot sẵn sàng! Nhắn lệnh qua Telegram để điều khiển.
-[08:16:15 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:19 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:21 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:25 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:26 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:30 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:31 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:36 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:37 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:41 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:42 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:47 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:48 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:52 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:53 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:57 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:16:59 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:03 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:04 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:08 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:09 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:14 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:15 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:19 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:20 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:25 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:26 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:30 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:31 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:35 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:37 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:41 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:42 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:46 19/4/2026] [WARN] [TG] getUpdates thất bại: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
-[08:17:59 19/4/2026] [INFO] 
-════════════════════════════════════════════════════
-[08:17:59 19/4/2026] [INFO] 🕒 TASK #1 — 08:17:59 19/4/2026
-[08:17:59 19/4/2026] [INFO] ════════════════════════════════════════════════════
-[08:17:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
-[08:18:01 19/4/2026] [INFO] 📡 Thu thập trending content...
-[08:18:02 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:18:03 19/4/2026] [INFO] 📊 10 bài trending
-[08:18:03 19/4/2026] [INFO] 🤖 Đang tạo bài viết bằng AI...
-[08:18:18 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:18:21 19/4/2026] [INFO] ✅ AI phản hồi từ: Antigravity
-[08:18:21 19/4/2026] [INFO] 📝 Bài viết (1009 ký tự) — Preview:
-🔥 KHI AI QUÁ THÔNG MINH ĐẾN MỨC BỊ COI LÀ "ẢO GIÁC"! 
-
-Chuyện thật như đùa vừa gây xôn xao cộng đồn...
-[08:18:26 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:18:26 19/4/2026] [INFO] 🔍 [AI-HEAL] Phân tích lỗi: unhandledRejection
-[08:18:34 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:18:42 19/4/2026] [INFO] ✅ AI phản hồi từ: Antigravity
-[08:18:42 19/4/2026] [INFO] 🤖 AI phân tích: **1. Nguyên nhân chính:** 
-Trình duyệt Chromium/Chrome chạy ngầm bị crash hoặc treo (zombie process) khiến Puppeteer không thể khởi tạo hoặc kết nối với tab mới (`browser.newPage()`).
-
-**2. Giải pháp khả thi nhất:**
-- **Dọn dẹp process:** Buộc đóng toàn bộ các tiến trình Chrome đang bị kẹt trên Windows.
-- **Cài lại thư viện:** Xóa và cài lại Puppeteer để tải lại đúng phiên bản trình duyệt tương thích (đặc biệt quan trọng với Node v22).
-- **Cấu hình Launch:** Bổ sung `args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']` vào hàm `puppeteer.launch()` để tránh lỗi tràn RAM và phân quyền.
-- **Bắt lỗi:** Thêm `process.on('unhandledRejection', ...)` và `try/catch` để đóng `browser` đúng cách khi lỗi xảy ra.
-
-**3. Lệnh CMD để fix (Chạy trong thư mục dự án):**
-[CMD_FIX]taskkill /F /IM chrome.exe /T & npm uninstall puppeteer & npm install puppeteer[/CMD_FIX]
-[08:18:43 19/4/2026] [INFO] 🔧 Chạy CMD fix: taskkill /F /IM chrome.exe /T & npm uninstall puppeteer & npm install puppeteer
-[08:18:50 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:19:06 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:19:09 19/4/2026] [INFO] 📩 Lệnh Telegram: "/start"
-[08:19:13 19/4/2026] [WARN] CMD fix thất bại: spawnSync C:\WINDOWS\system32\cmd.exe ETIMEDOUT
-[08:19:26 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:19:42 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:19:44 19/4/2026] [INFO] 📩 Lệnh Telegram: "đăng bài lên fb cho tôi"
-[08:19:44 19/4/2026] [INFO] 📡 Thu thập trending...
-[08:19:47 19/4/2026] [INFO] 🤖 Tạo bài viết bằng AI...
-[08:20:05 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:20:10 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:20:10 19/4/2026] [INFO] 🔍 AI Self-Heal: unhandledRejection
-[08:20:21 19/4/2026] [INFO] 👂 Telegram polling BẬT
-[08:20:21 19/4/2026] [INFO] ⏳ Lần tạo bài đầu tiên sau 5 phút...
-[08:20:21 19/4/2026] [INFO] ✅ Bot sẵn sàng! Nhắn lệnh qua Telegram để điều khiển.
-[08:20:21 19/4/2026] [INFO] 📩 Lệnh Telegram: "đăng bài lên fb cho tôi"
-[08:20:21 19/4/2026] [INFO] 📡 Thu thập trending...
-[08:20:24 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:20:24 19/4/2026] [INFO] 🤖 AI: **1. Nguyên nhân**
-Trình duyệt Chromium đã bị crash (do thiếu RAM, Facebook chặn) hoặc đã bị đóng (`browser.close()`) trước khi thao tác hoàn tất. Lỗi rơi vào `unhandledRejection` do Promise không có `try...catch`.
-
-**2. Giải pháp cụ thể**
-*   **Bắt lỗi:** Bọc toàn bộ các thao tác `browser` và `page` trong khối `try...catch`.
-*   **Chống crash:** Thêm các flags tối ưu bộ nhớ khi khởi tạo: 
-    `puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] })`
-*   **Dùng Chrome thật (Rất hiệu quả trên Windows & lách bot FB):** Thay vì dùng Chromium mặc định, hãy trỏ thẳng tới Chrome của máy bằng cách thêm option: `executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'`
-*   **Kiểm tra logic:** Đảm bảo không có đoạn code nào tiếp tục gọi `page.evaluate()` hay `page.goto()` sau khi tiến trình đã gọi `browser.close()`.
-
-**3. Lệnh fix**
-Cài lại Puppeteer để đảm bảo Chromium local không bị lỗi/thiếu file trên Windows:
-[CMD_FIX]npm uninstall puppeteer && npm install puppeteer[/CMD_FIX]
-[08:20:25 19/4/2026] [INFO] 🤖 Tạo bài viết bằng AI...
-[08:20:35 19/4/2026] [WARN] CMD fix lỗi: Command failed: npm uninstall puppeteer && npm install puppeteer
-npm error code EBUSY
-npm error syscall rename
-npm error path D:\test ai\ai code\ai code\fb-auto-bot\node_modules\puppeteer
-npm error dest D:\test ai\ai code\ai code\fb-auto-bot\node_modules\.puppeteer-a4e0GYP6
-npm error errno -4082
-npm error EBUSY: resource busy or locked, rename 'D:\test ai\ai code\ai code\fb-auto-bot\node_modules\puppeteer' -> 'D:\test ai\ai code\ai code\fb-auto-bot\node_modules\.puppeteer-a4e0GYP6'
-npm error A complete log of this run can be found in: C:\Users\trant\AppData\Local\npm-cache\_logs\2026-04-19T01_20_25_677Z-debug-0.log
-
-[08:20:42 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:20:42 19/4/2026] [WARN] Không tạo poster: Unable to launch browser, error message: Could not find Chrome (ver. 147.0.7727.56). This can occur if either
- 1. you did not perform an installation before running the script (e.g. `npx puppeteer browsers install chrome`) or
- 2. your cache path is incorrectly configured (which is: C:\Users\trant\.cache\puppeteer).
-For (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.
-[08:20:44 19/4/2026] [INFO] 📤 Bài mo52xktx gửi Telegram chờ duyệt
-[08:21:00 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:21:16 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:21:32 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:21:48 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:21:50 19/4/2026] [INFO] 📩 Lệnh Telegram: "bạn tìm cho tôi bài viết hot trên fb về Viber code, công ngh"
-[08:21:50 19/4/2026] [INFO] 📡 Thu thập trending...
-[08:22:09 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:22:25 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:22:27 19/4/2026] [INFO] 📩 Lệnh Telegram: "ở việt nam cơ mà"
-[08:22:37 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:22:54 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:22:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
-[08:23:10 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:23:26 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:23:42 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:23:58 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:24:14 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:24:30 19/4/2026] [WARN] [TG] getUpdates thất bại: timeout of 15000ms exceeded
-[08:24:38 19/4/2026] [INFO] 📩 Lệnh Telegram: "https://hkshoptaikhoan.vercel.app
-
-viết bài đăng để quảng bá"
-[08:24:39 19/4/2026] [INFO] 📡 Thu thập trending...
-[08:24:41 19/4/2026] [INFO] 🤖 Tạo bài viết bằng AI...
-[08:25:00 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:25:06 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:25:06 19/4/2026] [INFO] 🔍 AI Self-Heal: unhandledRejection
-[08:25:20 19/4/2026] [INFO] ✅ AI từ: Antigravity
-[08:25:20 19/4/2026] [INFO] 🤖 AI: **1. Nguyên nhân**
-Trình duyệt Chromium bị đóng đột ngột, crash do cạn RAM, hoặc tiến trình bị treo ngầm trên Windows khiến Puppeteer không thể tạo/truy cập tab mới.
-
-**2. Giải pháp cụ thể**
-- **Bắt lỗi:** Bọc các đoạn code gọi `browser.newPage()` hoặc `browser.pages()` bằng `try...catch` để tránh văng app (`unhandledRejection`).
-- **Tối ưu khởi tạo:** Thêm các flags chống crash do thiếu bộ nhớ dùng chung khi gọi `puppeteer.launch()`: 
-  `args: ['--no-sandbox', '--disable-dev-shm-usage']`
-- **Dọn dẹp:** Xóa các tiến trình Chrome/Chromium rác đang chạy ngầm trên Windows trước khi khởi động lại bot.
-
-**3. Lệnh fix:** 
-Dọn dẹp các tiến trình Chrome bị treo ngầm (Lưu ý: Lệnh này sẽ đóng cả trình duyệt Chrome bạn đang dùng):
-[CMD_FIX]taskkill /F /IM chrome.exe /T[/CMD_FIX]
-[08:25:21 19/4/2026] [INFO] ✅ CMD fix OK!
-[08:27:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
-[08:31:55 19/4/2026] [INFO] 👂 Telegram polling ON
-[08:31:55 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
-[08:31:55 19/4/2026] [INFO] ✅ Bot sẵn sàng!
-[08:32:17 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (3467 chars)
-[08:32:24 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (156 chars)
-[08:32:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
-[08:33:09 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1182 chars)
-[08:33:55 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
-[08:33:56 19/4/2026] [INFO] 📡 Thu thập trending...
-[08:34:00 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
-[08:34:00 19/4/2026] [INFO] 🤖 [AI] Bước 1: Chọn chủ đề...
-[08:34:01 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1125 chars)
-[08:34:06 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (65 chars)
-[08:34:06 19/4/2026] [INFO] 🤖 [AI] Bước 2: Viết bài chuẩn SEO...
-[08:34:21 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (192 chars)
-[08:34:21 19/4/2026] [INFO] ✅ Bài viết: 192 ký tự | Provider: Antigravity Pro
-[08:34:27 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
-[08:34:40 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1956 chars)
-[08:34:52 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (413 chars)
-[08:36:20 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1723 chars)
-[08:37:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[08:42:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[08:43:49 19/4/2026] [INFO] ✅ SelfHeal module ready | Whitelist: bot.js, config.json, modules/self-heal.js, modules/content.js, modules/browser.js, modules/poster.js
+[08:43:50 19/4/2026] [INFO] 👂 Telegram polling ON
+[08:43:50 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[08:43:50 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[08:45:31 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1222 chars)
+[08:45:31 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1396 chars)
+[08:45:50 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[08:45:51 19/4/2026] [INFO] 📡 Thu thập trending...
+[08:45:53 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[08:45:53 19/4/2026] [INFO] 🤖 [AI] Bước 1: Chọn chủ đề...
+[08:46:00 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (56 chars)
+[08:46:00 19/4/2026] [INFO] 🤖 [AI] Bước 2: Viết bài chuẩn SEO...
+[08:46:15 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (101 chars)
+[08:46:15 19/4/2026] [INFO] ✅ Bài viết: 101 ký tự | Provider: Antigravity Pro
+[08:46:21 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[08:46:21 19/4/2026] [HEAL] 🔧 Self-Heal #1 [heal_mo53uk2c] — unhandledRejection
+[08:46:40 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (969 chars)
+[08:47:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[08:49:02 19/4/2026] [INFO] ✅ SelfHeal + TaskRunner ready | Whitelist: bot.js, config.json, modules/self-heal.js, modules/content.js, modules/browser.js, modules/poster.js, orchestrator/prompts.json
+[08:49:03 19/4/2026] [INFO] 👂 Telegram polling ON
+[08:49:03 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[08:49:03 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[08:51:03 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[08:51:04 19/4/2026] [INFO] 📡 Thu thập trending...
+[08:51:06 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[08:51:06 19/4/2026] [INFO] 🤖 [AI] Bước 1: Chọn chủ đề...
+[08:51:12 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (66 chars)
+[08:51:12 19/4/2026] [INFO] 🤖 [AI] Bước 2: Viết bài chuẩn SEO...
+[08:51:28 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (143 chars)
+[08:51:28 19/4/2026] [INFO] ✅ Bài viết: 143 ký tự | Provider: Antigravity Pro
+[08:51:34 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[08:52:03 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1228 chars)
+[08:52:08 19/4/2026] [INFO] 🔄 Auto-restart lần 1...
+[08:52:11 19/4/2026] [INFO] ✅ SelfHeal + TaskRunner ready | Whitelist: bot.js, config.json, modules/self-heal.js, modules/content.js, modules/browser.js, modules/poster.js, orchestrator/prompts.json
+[08:52:12 19/4/2026] [INFO] 👂 Telegram polling ON
+[08:52:12 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[08:52:12 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[08:52:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[08:53:52 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🔧 Backup Dev
+[08:53:53 19/4/2026] [INFO] 👂 Telegram polling ON
+[08:53:53 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[08:53:53 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[08:54:12 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[08:54:13 19/4/2026] [INFO] 📡 Thu thập trending...
+[08:54:16 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[08:54:16 19/4/2026] [INFO] 🤖 [AI] Bước 1: Chọn chủ đề...
+[08:54:22 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (49 chars)
+[08:54:22 19/4/2026] [INFO] 🤖 [AI] Bước 2: Viết bài chuẩn SEO...
+[08:54:37 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (149 chars)
+[08:54:37 19/4/2026] [INFO] ✅ Bài viết: 149 ký tự | Provider: Antigravity Pro
+[08:54:42 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[08:54:42 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[08:55:17 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (528 chars)
+[08:55:53 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[08:55:54 19/4/2026] [INFO] 📡 Thu thập trending...
+[08:55:57 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[08:55:57 19/4/2026] [INFO] 🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...
+[08:55:57 19/4/2026] [AgentMgr] 📞 Gọi 📊 Trend Analyst cho task "analyze_trend" (attempt 1/1)
+[08:56:03 19/4/2026] [AgentMgr] ✅ 📊 Trend Analyst hoàn thành (90 chars)
+[08:56:03 19/4/2026] [INFO] ✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...
+[08:56:03 19/4/2026] [AgentMgr] 📞 Gọi ✍️ Content Writer cho task "write_content" (attempt 1/1)
+[08:56:12 19/4/2026] [AgentMgr] ✅ ✍️ Content Writer hoàn thành (697 chars)
+[08:56:12 19/4/2026] [INFO] ✅ Bài viết: 697 ký tự | Provider: undefined
+[08:56:16 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[08:56:17 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[08:56:47 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (989 chars)
+[08:57:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:02:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:03:26 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev
+[09:03:28 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:03:28 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[09:03:28 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:05:28 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[09:05:28 19/4/2026] [INFO] 📡 Thu thập trending...
+[09:05:31 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[09:05:31 19/4/2026] [INFO] 🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...
+[09:05:31 19/4/2026] [AgentMgr] 📞 Gọi 📊 Trend Analyst cho task "analyze_trend" (attempt 1/1)
+[09:05:36 19/4/2026] [AgentMgr] ✅ 📊 Trend Analyst hoàn thành (102 chars)
+[09:05:36 19/4/2026] [INFO] ✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...
+[09:05:36 19/4/2026] [AgentMgr] 📞 Gọi ✍️ Content Writer cho task "write_content" (attempt 1/1)
+[09:05:47 19/4/2026] [AgentMgr] ✅ ✍️ Content Writer hoàn thành (499 chars)
+[09:05:47 19/4/2026] [INFO] ✅ Bài viết: 499 ký tự | Provider: undefined
+[09:05:51 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[09:05:52 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:06:24 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (565 chars)
+[09:07:40 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev
+[09:07:41 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:07:41 19/4/2026] [INFO] ⌨️  CLI mode — Chờ lệnh từ Telegram...
+[09:07:41 19/4/2026] [INFO]    Dùng lệnh: tạo bài | upgrade | pc <việc> | claude <việc>
+[09:07:41 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:07:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:08:06 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:08:06 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:08:06 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:08:16 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (140 chars)
+[09:08:16 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (868 chars)
+[09:08:16 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (722 chars)
+[09:08:17 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1231 chars)
+[09:08:18 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1181 chars)
+[09:08:29 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1810 chars)
+[09:11:59 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:11:59 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:12:06 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (192 chars)
+[09:12:07 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (368 chars)
+[09:12:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (214 chars)
+[09:12:09 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (338 chars)
+[09:12:10 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (358 chars)
+[09:12:13 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:12:23 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (1309 chars)
+[09:12:25 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (2430 chars)
+[09:12:27 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1052 chars)
+[09:12:30 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (2045 chars)
+[09:12:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:17:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:22:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:25:30 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev
+[09:25:31 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:25:31 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[09:25:31 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:26:27 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:26:36 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (677 chars)
+[09:27:03 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:27:03 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:27:04 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:27:04 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:27:13 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (153 chars)
+[09:27:14 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (187 chars)
+[09:27:14 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (150 chars)
+[09:27:18 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (137 chars)
+[09:27:20 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1760 chars)
+[09:27:25 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1561 chars)
+[09:27:31 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[09:27:31 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1303 chars)
+[09:27:32 19/4/2026] [INFO] 📡 Thu thập trending...
+[09:27:34 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[09:27:34 19/4/2026] [INFO] 🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...
+[09:27:34 19/4/2026] [AgentMgr] 📞 Gọi 📊 Trend Analyst cho task "analyze_trend" (attempt 1/1)
+[09:27:40 19/4/2026] [AgentMgr] ✅ 📊 Trend Analyst hoàn thành (81 chars)
+[09:27:40 19/4/2026] [INFO] ✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...
+[09:27:40 19/4/2026] [AgentMgr] 📞 Gọi ✍️ Content Writer cho task "write_content" (attempt 1/1)
+[09:27:50 19/4/2026] [AgentMgr] ✅ ✍️ Content Writer hoàn thành (1753 chars)
+[09:27:50 19/4/2026] [INFO] ✅ Bài viết: 1753 ký tự | Provider: undefined
+[09:27:54 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[09:27:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:27:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:28:28 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (485 chars)
+[09:32:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:37:27 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[09:37:27 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:37:27 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[09:37:27 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:37:46 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:37:46 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:37:52 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (516 chars)
+[09:37:53 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (534 chars)
+[09:37:55 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (590 chars)
+[09:37:56 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (404 chars)
+[09:37:57 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (323 chars)
+[09:37:59 19/4/2026] [WARN] ⏳ Task đang chạy, bỏ qua lần này...
+[09:38:22 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:38:23 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:23 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:23 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776566302956.png
+[09:38:24 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:25 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:38:34 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (135 chars)
+[09:38:34 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (1102 chars)
+[09:38:34 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (1117 chars)
+[09:38:35 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1074 chars)
+[09:38:40 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (3008 chars)
+[09:38:49 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (151 chars)
+[09:38:52 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1771 chars)
+[09:38:52 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:53 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:54 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:38:54 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[09:38:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:39:01 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (971 chars)
+[09:39:02 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (679 chars)
+[09:39:02 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (821 chars)
+[09:39:03 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (909 chars)
+[09:39:07 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (1107 chars)
+[09:39:11 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (1017 chars)
+[09:39:19 19/4/2026] [INFO] ✅ [AI:Antigravity Pro] OK (979 chars)
+[09:39:28 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[09:39:28 19/4/2026] [INFO] 📡 Thu thập trending...
+[09:39:31 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[09:39:31 19/4/2026] [INFO] 🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...
+[09:39:31 19/4/2026] [AgentMgr] 📞 Gọi 📊 Trend Analyst cho task "analyze_trend" (attempt 1/1)
+[09:39:36 19/4/2026] [AgentMgr] ✅ 📊 Trend Analyst hoàn thành (86 chars)
+[09:39:36 19/4/2026] [INFO] ✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...
+[09:39:36 19/4/2026] [AgentMgr] 📞 Gọi ✍️ Content Writer cho task "write_content" (attempt 1/1)
+[09:39:47 19/4/2026] [AgentMgr] ✅ ✍️ Content Writer hoàn thành (146 chars)
+[09:39:47 19/4/2026] [INFO] ✅ Bài viết: 146 ký tự | Provider: undefined
+[09:39:51 19/4/2026] [ERROR] 💥 UNHANDLED: Error: Unable to get browser page
+[09:39:52 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:40:57 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (536 chars)
+[09:47:12 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[09:47:13 19/4/2026] [INFO] 👂 Telegram polling ON
+[09:47:13 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[09:47:13 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[09:48:07 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:48:07 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776566887822.png
+[09:48:10 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:48:15 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (112 chars)
+[09:48:24 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="""
+[09:48:24 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776566904702.png
+[09:48:25 19/4/2026] [PCCtrl] 🚀 Mở app: chrome
+[09:48:36 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776566916501.png
+[09:48:40 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:48:41 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776566921011.png
+[09:48:42 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:48:46 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (167 chars)
+[09:48:50 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="https://facebook.com""
+[09:48:50 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776566930666.png
+[09:48:51 19/4/2026] [PCCtrl] 🌐 Mở URL: https://facebook.com [chrome]
+[09:48:54 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776566934529.png
+[09:50:02 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[09:50:03 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:50:14 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (145 chars)
+[09:51:41 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[09:51:41 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[09:51:51 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (152 chars)
+[09:53:42 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[09:53:44 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776567224731.png
+[09:54:01 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[09:54:12 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (271 chars)
+[09:54:20 19/4/2026] [PCCtrl] 🤖 AI Action: type="screenshot" attrs=""
+[09:54:20 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\ai_request_1776567260709.png

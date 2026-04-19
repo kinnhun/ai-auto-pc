@@ -32,24 +32,24 @@
 'use strict';
 
 const { buildPrompt, parsePatches, WHITELIST, getTestCmd } = require('./prompt-builder');
-const guard  = require('./git-safety-guard');
+const AgentMgr = require('./agent-manager');
+const guard    = require('./git-safety-guard');
 const { spawnSync } = require('child_process');
-const path   = require('path');
-const fs     = require('fs');
+const path     = require('path');
+const fs       = require('fs');
 
-const ROOT   = path.join(__dirname, '..');
+const ROOT     = path.join(__dirname, '..');
 
-// ── DEPS (injected từ bot.js) ───────────────────────────────
-let _callAI    = null;
+// ── DEPS (injected từ bot.js) ────────────────────────────────────
 let _tg        = null;
-let _tgRaw     = null;   // tgCall raw (hỗ trợ inline keyboard)
+let _tgRaw     = null;
 let _restartFn = null;
 
-function init({ callAI, tg, tgRaw, restartFn }) {
-  _callAI    = callAI;
+function init({ tg, tgRaw, restartFn }) {
   _tg        = tg;
   _tgRaw     = tgRaw;
   _restartFn = restartFn;
+  // AgentMgr không cần inject — tự đọc config.json
 }
 
 // ── PENDING TASKS (chờ approval) ────────────────────────────
@@ -114,23 +114,27 @@ async function runTask(taskType, ctx = {}, opts = {}) {
   const requireApproval = opts.requireApproval ?? taskDef.require_approval;
   const autoConf        = opts.autoApproveConf ?? taskDef.auto_approve_confidence;
 
+  // Hiển thị agent sẽ dùng
+  const agents      = AgentMgr.getAgentsForTask(taskType);
+  const primaryAgent = agents[0];
+
   await _tg?.(
-    `🤖 <b>Task: ${taskType.toUpperCase()}</b>\n` +
+    `💼 <b>Task: ${taskType.toUpperCase()}</b>\n` +
+    `${primaryAgent?.name || '❓ Unknown'}: ${primaryAgent?.role || ''}\n` +
     `📂 Target: <code>${targetFile}</code>\n` +
-    `🔬 Test: <code>${testCmd}</code>\n` +
-    `⏳ Đang gọi Antigravity Pro...`
+    `🕬 Test: <code>${testCmd}</code>\n` +
+    `⏳ Đang gọi agent...`
   );
 
-  // 2. Call AI
-  const aiResult = await _callAI?.(prompt, {
-    temperature : 0.1,
-    preferModel : 'Antigravity Pro',
-    maxTokens   : 4000,
+  // 2. Call đúng agent theo task type (AgentManager tự chọn model)
+  const aiResult = await AgentMgr.callAgent(taskType, prompt, {
+    temperature: opts.temperature,
+    maxTokens  : opts.maxTokens,
   });
 
   if (!aiResult) {
-    await _tg?.('❌ Antigravity không phản hồi!');
-    return { ok: false, error: 'AI timeout' };
+    await _tg?.(`❌ Tất cả agents fail cho task: ${taskType}!`);
+    return { ok: false, error: 'All agents failed' };
   }
 
   // 3. Parse response

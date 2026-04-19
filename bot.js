@@ -28,6 +28,9 @@ const fs        = require('fs');
 const path      = require('path');
 const { execSync, spawn } = require('child_process');
 const SelfHeal  = require('./modules/self-heal');
+const AgentMgr  = require('./orchestrator/agent-manager');
+const DevTeam   = require('./orchestrator/dev-team');
+const Router    = require('./orchestrator/message-router');
 
 // ═══════════════════════════════════════════════════════════
 //  SECTION 1 — BOOTSTRAP & CONFIG
@@ -50,6 +53,59 @@ const SESSION_DIR  = path.join(__dir, 'session_data');
 const BOTJS        = path.join(__dir, 'bot.js');
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
+
+// ═══════════════════════════════════════════════════════════
+//  SECTION 0 — CLI ARGS + FEATURE TOGGLES
+// ═══════════════════════════════════════════════════════════
+
+// Parse CLI args: node bot.js --no-autopost --no-upgrade --dry-run
+const ARGS = Object.fromEntries(
+  process.argv.slice(2)
+    .filter(a => a.startsWith('--'))
+    .map(a => {
+      const [k, v] = a.slice(2).split('=');
+      return [k, v ?? true];
+    })
+);
+
+// Feature toggles — có thể bật/tắt qua Telegram hoặc CLI
+const FEATURES = {
+  autoPost   : ARGS['no-autopost']  ? false : true,  // Tự động tạo bài định kỳ
+  autoUpgrade: ARGS['no-upgrade']   ? false : true,  // Tự động upgrade code
+  selfHeal   : ARGS['no-selfheal']  ? false : true,  // Tự động sửa lỗi
+  pcControl  : ARGS['no-pc']        ? false : true,  // PC Controller
+  postToFB   : ARGS['no-fb']        ? false : true,  // Đăng lên Facebook
+  tgApproval : ARGS['no-approval']  ? false : true,  // Hỏi duyệt qua Telegram
+  dryRun     : ARGS['dry-run']      ? true  : false, // Dry-run (không thực thi)
+};
+
+const CLI_MODE = !!ARGS['cli']; // node bot.js --cli → chỉ chạy 1 lần theo lệnh
+
+function saveFeatures() {
+  try {
+    const cfg = loadConfig();
+    cfg._features = FEATURES;
+    fs.writeFileSync(CFG_PATH, JSON.stringify(cfg, null, 2));
+  } catch(e) {}
+}
+
+function featureStatus() {
+  const icon = (on) => on ? '🟢' : '🔴';
+  return [
+    `⚙️ <b>FEATURE TOGGLES</b>`,
+    ``,
+    `${icon(FEATURES.autoPost)}    autopost   — Tự động tạo bài`,
+    `${icon(FEATURES.autoUpgrade)} upgrade    — Tự động nâng cấp code`,
+    `${icon(FEATURES.selfHeal)}    selfheal   — Tự sửa lỗi`,
+    `${icon(FEATURES.pcControl)}   pc         — PC Controller`,
+    `${icon(FEATURES.postToFB)}    postfb     — Đăng lên Facebook`,
+    `${icon(FEATURES.tgApproval)}  approval   — Hỏi duyệt qua Telegram`,
+    `${icon(FEATURES.dryRun)}      dryrun     — Dry-run mode`,
+    ``,
+    `Bật: <code>on autopost</code>  |  Tắt: <code>off autopost</code>`,
+  ].join('\n');
+}
+
 
 for (const dir of [POSTER_DIR, SESSION_DIR]) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -225,25 +281,41 @@ function initSelfHeal() {
   };
 
   SelfHeal.init({
-    tg        : tgRaw,   // self-heal dùng tgRaw để có inline keyboard
-    callAI,
+    tg        : tgRaw,
+    callAI,             // self-heal giữ callAI để fallback
     restartFn : autoRestart,
   });
 
-  // TaskRunner cũng cần inject riêng (upgrade dùng trực tiếp)
-  TaskRunner.init({
-    callAI,
+  // Init DevTeam (bao gồm TaskRunner + PC + Claude)
+  DevTeam.init({
     tg        : tgSimple,
+    tgPhoto   : tgPhoto,    // gửi ảnh lên TG
     tgRaw,
     restartFn : autoRestart,
   });
 
-  log('INFO', `✅ SelfHeal + TaskRunner ready | Whitelist: ${SelfHeal.HEAL_CONFIG.writableFiles.join(', ')}`);
+  log('INFO', `✅ Agents: ${Object.values(AgentMgr.registry.agents).map(a=>a.name).join(' | ')}`);
 }
 
 // Shorthand gọi từ các error handler
+// LOCK: chống gọi trùng lặp khi nhiều error cùng lúc
+let _selfFixBusy = false;
+let _selfFixLast = 0;
+const SELF_FIX_COOLDOWN_MS = 15000; // 15s cooldown giữa các lần fix
+
 async function antigravitySelfFix(errorMsg, context) {
-  return SelfHeal.selfHeal(errorMsg, context, { restartFn: autoRestart });
+  const now = Date.now();
+  if (_selfFixBusy || (now - _selfFixLast) < SELF_FIX_COOLDOWN_MS) {
+    log('WARN', `[SelfFix] Đang bận hoặc cooldown — bỏ qua (context: ${context})`);
+    return;
+  }
+  _selfFixBusy = true;
+  _selfFixLast = now;
+  try {
+    return await SelfHeal.selfHeal(errorMsg, context, { restartFn: autoRestart });
+  } finally {
+    _selfFixBusy = false;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -434,16 +506,18 @@ ${config.aiPrompt.replace('{trending_data}', trendingText)}
 
 Bài đã đăng gần đây (TRÁNH lặp nội dung): ${recentTitles || 'chưa có'}`;
 
-  log('INFO', '🤖 [AI] Bước 1: Chọn chủ đề...');
-  const step1 = await callAI(step1Prompt, { temperature: 0.7, preferModel: 'Antigravity Pro', maxTokens: 500 });
-  if (!step1) { log('WARN', 'Bước 1 thất bại, dùng prompt thẳng'); }
+  // Bước 1: TREND_ANALYST chọn chủ đề
+  log('INFO', '🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...');
+  const step1 = await AgentMgr.callAgent('analyze_trend', step1Prompt, { temperature: 0.6 });
+  if (!step1) { log('WARN', 'TREND_ANALYST thất bại, tiếp tục...'); }
 
   const finalPrompt = step1
     ? `Chủ đề được chọn: ${step1.content}\n\n${step2Prompt}`
     : step2Prompt;
 
-  log('INFO', '🤖 [AI] Bước 2: Viết bài chuẩn SEO...');
-  const result = await callAI(finalPrompt, { temperature: 0.85, preferModel: 'Antigravity Pro', maxTokens: 1500 });
+  // Bước 2: CONTENT_WRITER viết bài chuẩn SEO
+  log('INFO', '✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...');
+  const result = await AgentMgr.callAgent('write_content', finalPrompt, { temperature: 0.85 });
 
   if (result) {
     postHistory.push({
@@ -548,10 +622,14 @@ function findBrowser() {
 
 async function launchBrowser() {
   const execPath = findBrowser();
+  if (!execPath) {
+    throw new Error('Không tìm thấy Chrome/Edge trên máy! Cài Chrome hoặc kiểm tra đường dẫn.');
+  }
+
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: SESSION_DIR,
-    executablePath: execPath || undefined,
+    executablePath: execPath,
     args: [
       '--no-sandbox', '--disable-setuid-sandbox',
       '--disable-blink-features=AutomationControlled',
@@ -563,13 +641,27 @@ async function launchBrowser() {
     ignoreDefaultArgs: ['--enable-automation'],
   });
 
-  const pages = await browser.pages();
-  const page = pages[0] || await browser.newPage();
+  // Chờ browser khởi động xong trước khi lấy pages
+  await delay(1500);
+
+  let page;
+  try {
+    const pages = await browser.pages();
+    page = pages.length > 0 ? pages[0] : await browser.newPage();
+  } catch(e) {
+    log('WARN', `pages() lỗi: ${e.message} — thử newPage()`);
+    page = await browser.newPage();
+  }
+
+  if (!page) throw new Error('Unable to get browser page');
+
   await page.evaluateOnNewDocument(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     window.chrome = { runtime: {} };
     Object.defineProperty(navigator, 'plugins', { get: () => [1,2,3] });
   });
+
+  log('INFO', `🌐 Browser launched: ${execPath.split('\\').pop()}`);
   return { browser, page };
 }
 
@@ -734,41 +826,115 @@ const COMMANDS = {
   'viết bài'  : () => generateAndQueue('lệnh Telegram'),
   'đăng bài'  : () => generateAndQueue('lệnh Telegram'),
   'chạy'      : () => generateAndQueue('lệnh Telegram'),
-  'upgrade'   : () => antigravityAutoUpgrade(),
-  'nâng cấp'  : () => antigravityAutoUpgrade(),
+  'upgrade'   : () => FEATURES.autoUpgrade ? antigravityAutoUpgrade() : tg('🔴 autoUpgrade đang tắt. Dùng <code>on upgrade</code> để bật'),
+  'nâng cấp'  : () => FEATURES.autoUpgrade ? antigravityAutoUpgrade() : tg('🔴 autoUpgrade đang tắt'),
+  'agents'    : () => tg(`📋 <b>AGENT REGISTRY</b>\n\n${AgentMgr.getStatusReport()}`),
+  'team'      : async () => tg(await DevTeam.getTeamStatus()),
+  'features'  : () => tg(featureStatus()),
+  'toggles'   : () => tg(featureStatus()),
   'status'    : () => tg(
-    `📋 <b>BOT STATUS v6.1</b>\n\n` +
-    `✅ Antigravity AI: <b>Online</b>\n` +
+    `📋 <b>BOT STATUS v6.2 — Dev Team Edition</b>\n\n` +
+    `🏢 Team: ${Object.values(AgentMgr.registry.agents).map(a=>a.emoji||'🤖').join('')}\n` +
     `📊 Bài đã đăng: ${postHistory.length}\n` +
     `📝 Đang chờ duyệt: ${pendingPosts.size}\n` +
     `🛡️ Self-Heal fixes: ${SelfHeal.getFixCount()}/${SelfHeal.HEAL_CONFIG.maxFixPerSession}\n` +
-    `📂 Whitelist: ${SelfHeal.HEAL_CONFIG.writableFiles.join(', ')}\n` +
     `⏱ Chu kỳ: ${config.intervalMinutes} phút\n` +
-    `🕒 ${new Date().toLocaleString('vi-VN')}`
+    `🕒 ${new Date().toLocaleString('vi-VN')}\n\n` +
+    `Lệnh: <code>pc <việc></code> | <code>claude <việc></code> | <code>features</code>`
   ),
 };
 
 async function handleTgMessage(text) {
   const lower = text.toLowerCase().trim();
 
-  // Kiểm tra exact command
-  for (const [cmd, fn] of Object.entries(COMMANDS)) {
-    if (lower === cmd || lower.startsWith(cmd)) return fn();
+  // 1. Kiểm tra Toggle Bật/Tắt
+  const onM  = lower.match(/^(on|bật|bat)\s+(\w+)/);
+  const offM = lower.match(/^(off|tắt|tat)\s+(\w+)/);
+  const FEAT_ALIAS = {
+    autopost: 'autoPost', 'auto-post': 'autoPost', 'tạo bài': 'autoPost',
+    upgrade: 'autoUpgrade', 'nâng cấp': 'autoUpgrade',
+    selfheal: 'selfHeal', 'self-heal': 'selfHeal', 'tự sửa': 'selfHeal',
+    pc: 'pcControl', 'pc controller': 'pcControl',
+    postfb: 'postToFB', facebook: 'postToFB',
+    approval: 'tgApproval', 'duyệt': 'tgApproval',
+    dryrun: 'dryRun', 'dry-run': 'dryRun', 'thử': 'dryRun',
+  };
+
+  if (onM || offM) {
+    const [, , rawKey] = (onM || offM);
+    const feat = FEAT_ALIAS[rawKey] || rawKey;
+    if (feat in FEATURES) {
+      FEATURES[feat] = !!onM;
+      saveFeatures();
+      return tg(`${onM ? '🟢' : '🔴'} <b>${feat}</b> đã ${onM ? 'BẬT' : 'TẮT'}\n\n${featureStatus()}`);
+    } else {
+      return tg(`⚠️ Feature không hợp lệ: <code>${rawKey}</code>\n\nDùng: <code>features</code> để xem danh sách`);
+    }
   }
 
-  // Kiểm tra keyword
-  if (['trending','hot','xu hướng'].some(k => lower.includes(k))) {
+  // 2. Route message thông qua orchestrator/message-router.js
+  const route = Router.route(text);
+  if (!route) {
+    return tg('❓ Lệnh không rõ ràng. Nhắn <code>help</code> để xem danh sách.');
+  }
+
+  log('INFO', `[Router] Matched route: ${route.agent}`);
+
+  // 3. Điều phối theo Agent
+  if (route.agent === 'SYSTEM') {
+    if (lower === '/start' || lower === 'help') return COMMANDS['/start']();
+    if (lower === 'status' || lower === 'trạng thái') return COMMANDS['status']();
+    if (lower === 'features' || lower === 'toggles' || lower === 'cài đặt') return COMMANDS['features']();
+    if (lower === 'agents' || lower === 'team') return COMMANDS['team']();
+  } 
+  
+  else if (route.agent === 'PC_CONTROLLER') {
+    if (!FEATURES.pcControl) return tg('🔴 PC Controller đang tắt. Gõ `on pc` để bật.');
+    // Gửi toàn bộ text để AI tự phân tích ra action
+    return DevTeam.runPCTask(text);
+  } 
+  
+  else if (route.agent === 'CLAUDE_CODER') {
+    const taskContent = text.replace(/^(claude|refactor|tái cấu trúc)\s+/i, '').trim();
+    return DevTeam.runClaudeTask(taskContent);
+  } 
+  
+  else if (route.agent === 'CONTENT_WRITER') {
+    return generateAndQueue('lệnh Telegram');
+  } 
+  
+  else if (route.agent === 'TREND_ANALYST') {
     const trending = await getAllTrending();
     return tg('📊 <b>TOP TRENDING HIỆN TẠI</b>\n\n' +
       trending.slice(0,8).map((t,i) => `${i+1}. <b>[${t.source}]</b> ${esc(t.title)}\n   ⭐ ${t.points} pts`).join('\n\n')
     );
+  } 
+  
+  else if (route.agent === 'LEARNING_AGENT') {
+    const memory = require('./orchestrator/memory');
+    const input = text.replace(/^(nhớ|ghi nhớ|học|lưu ý|tự học)\s+/i, '').trim();
+    await tg('🧠 Đang trích xuất bài học để ghi nhớ...');
+    
+    const prompt = `Bạn là Memory Agent. Phân tích feedback này của Boss và tóm tắt thành 1-2 câu kinh nghiệm cốt lõi để các AI khác học hỏi.\nFeedback: "${input}"\nChỉ trả về nội dung đúc kết, không thưa gửi gì thêm.`;
+    const r = await AgentMgr.callAgent('extract_insight', prompt);
+    
+    if (r) {
+      memory.learn(r.content.trim(), 'User Feedback');
+      return tg(`✅ <b>Đã ghi nhớ:</b>\n<i>${esc(r.content)}</i>\n\nTừ nay toàn bộ đội ngũ AI sẽ tuân thủ nguyên tắc này khi nhận lệnh!`);
+    } else {
+      return tg('❌ Bận xíu r, chưa nhớ được!');
+    }
   }
 
-  // Câu hỏi tự do → Antigravity
-  if (text.length > 3) {
-    await tg('🤖 Antigravity đang trả lời...');
-    const r = await callAI(text, { preferModel: 'Antigravity Pro' });
-    if (r) return tg(`🤖 <b>${r.provider}</b>\n\n${esc(r.content.substring(0, 3500))}`);
+  else if (route.agent === 'CODE_REVIEWER') {
+    return FEATURES.autoUpgrade ? antigravityAutoUpgrade() : tg('🔴 autoUpgrade đang tắt.');
+  } 
+  
+  else if (route.agent === 'SENIOR_DEV') {
+    await tg('🤖 (Thư ký AI) Đang suy nghĩ...');
+    // Gọi bot trò chuyện / fix bug general
+    const r = await AgentMgr.callAgent('fix_bug', text, { temperature: 0.5, maxTokens: 1000 });
+    if (r) return tg(`${r.agentName}\n\n${esc(r.content.substring(0, 3500))}`);
     return tg('❌ AI không phản hồi!');
   }
 }
@@ -802,18 +968,18 @@ async function pollTelegram() {
         await tgAnswerCb(cb.id);
 
         // Upgrade callbacks
-        // [1] Self-heal approval (heal_apply, heal_diff, heal_skip)
-        if (['heal_apply', 'heal_diff', 'heal_skip'].includes(action)) {
+        // Route tất cả callbacks qua DevTeam
+        const devCallbacks = ['task_apply','task_preview','task_skip','pc_exec','pc_preview','pc_cancel'];
+        if (devCallbacks.includes(action)) {
           await tgAnswerCb(cb.id);
-          await SelfHeal.handleCallback(action, key, autoRestart);
+          await DevTeam.handleCallback(action, key);
           continue;
         }
 
-        // [2] Task runner approval (task_apply, task_preview, task_skip)
-        if (['task_apply', 'task_preview', 'task_skip'].includes(action)) {
+        // [1] Self-heal approval
+        if (['heal_apply', 'heal_diff', 'heal_skip'].includes(action)) {
           await tgAnswerCb(cb.id);
-          const TaskRunner = require('./orchestrator/task-runner');
-          await TaskRunner.handleCallback(action, key);
+          await SelfHeal.handleCallback(action, key, autoRestart);
           continue;
         }
 
@@ -888,54 +1054,75 @@ async function pollTelegram() {
 // ═══════════════════════════════════════════════════════════
 
 async function main() {
+  const mode = CLI_MODE ? 'CLI' : 'DAEMON';
+
   console.log('\n╔══════════════════════════════════════════════════════════╗');
-  console.log('║  🤖 FB AUTO-BOT v6.0 — ANTIGRAVITY EDITION              ║');
-  console.log('║  ✅ Luồng: Trending → AI SEO → TG Duyệt → FB Post      ║');
-  console.log('║  🛡️  Self-Fix: Antigravity tự sửa code khi lỗi          ║');
-  console.log('║  🚀 Auto-Upgrade: Antigravity review & nâng cấp định kỳ ║');
-  console.log(`║  ⏱  Chu kỳ: ${String(config.intervalMinutes + ' phút — Upgrade: ' + (config.autoUpgradeIntervalHours||12) + 'h').padEnd(45)}║`);
+  console.log('║  🤖 FB AUTO-BOT v6.2 — DEV TEAM EDITION                 ║');
+  console.log(`║  Mode: ${mode.padEnd(50)}║`);
+  console.log(`║  autoPost:  ${String(FEATURES.autoPost).padEnd(48)}║`);
+  console.log(`║  dryRun:    ${String(FEATURES.dryRun).padEnd(48)}║`);
+  console.log(`║  CLI flags: ${Object.keys(ARGS).join(', ').padEnd(48).substring(0,48)}║`);
   console.log('╚══════════════════════════════════════════════════════════╝\n');
 
-  // Khởi động
-  // Init self-heal module (depende em tg e callAI)
+  // Khởi động modules
   initSelfHeal();
 
   await tg(
-    `🚀 <b>FB AUTO-BOT v6.1 — ANTIGRAVITY EDITION</b>\n\n` +
-    `🤖 AI: Antigravity Pro (primary)\n` +
-    `✅ SEO Content: Bật (3-step chain)\n` +
-    `🛡️ Self-Heal: Bật\n` +
-    `   • Whitelist: bot.js, config.json, modules/*\n` +
-    `   • Git backup + rollback\n` +
-    `   • Approval mode: ${SelfHeal.HEAL_CONFIG.requireApproval ? 'BẬT' : 'TẮT'}\n` +
-    `🚀 Auto-Upgrade: Mỗi ${config.autoUpgradeIntervalHours || 12}h\n` +
-    `⏱ Tạo bài: Mỗi ${config.intervalMinutes} phút\n` +
-    `🕒 ${new Date().toLocaleString('vi-VN')}\n\n` +
-    `Lệnh: <code>tạo bài</code> | <code>upgrade</code> | <code>status</code>`
+    `🚀 <b>FB AUTO-BOT v6.2 — DEV TEAM EDITION</b>\n\n` +
+    `🏢 Team: 🧠 🔍 ✍️ 📊 🖥️ ⚡ 🔧\n` +
+    `📋 Mode: <b>${mode}</b>\n` +
+    featureStatus() + '\n\n' +
+    `<b>CLI:</b>\n` +
+    `<code>node bot.js</code>                  — chạy đầy đủ\n` +
+    `<code>node bot.js --no-autopost</code>    — không tự đăng bài\n` +
+    `<code>node bot.js --no-upgrade</code>     — không tự upgrade\n` +
+    `<code>node bot.js --dry-run</code>        — thử nghiệm không làm thật\n` +
+    `<code>node bot.js --cli</code>            — chờ lệnh thủ công`
   );
 
-  // Telegram polling — chạy liên tục
+  // Telegram polling — luôn bật dù mode nào
   log('INFO', '👂 Telegram polling ON');
   (async () => { while(true) { await pollTelegram(); await delay(800); } })().catch(e => log('ERROR', `Poll: ${e.message}`));
 
-  // Lần chạy đầu tiên
-  const first = (config.autoExecuteDelayMinutes || 2) * 60 * 1000;
-  log('INFO', `⏳ Tạo bài đầu tiên sau ${config.autoExecuteDelayMinutes || 2} phút...`);
-  setTimeout(() => generateAndQueue('auto - lần đầu'), first);
+  if (CLI_MODE) {
+    // CLI mode: chỉ lắng nghe lệnh, không tự chạy schedule
+    log('INFO', '⌨️  CLI mode — Chờ lệnh từ Telegram...');
+    log('INFO', '   Dùng lệnh: tạo bài | upgrade | pc <việc> | claude <việc>');
+  } else {
+    // DAEMON mode: chạy tự động theo schedule
+    if (FEATURES.autoPost) {
+      const first = (config.autoExecuteDelayMinutes || 2) * 60 * 1000;
+      log('INFO', `⏳ Tạo bài đầu tiên sau ${config.autoExecuteDelayMinutes || 2} phút...`);
+      setTimeout(() => {
+        if (FEATURES.autoPost) generateAndQueue('auto - lần đầu');
+      }, first);
+      setInterval(() => {
+        if (FEATURES.autoPost) generateAndQueue('auto - định kỳ');
+      }, config.intervalMinutes * 60 * 1000);
+    } else {
+      log('INFO', '🔴 autoPost TẮT — không tự tạo bài. Dùng lệnh "tạo bài" hoặc "on autopost"');
+    }
 
-  // Chu kỳ đăng bài
-  setInterval(() => generateAndQueue('auto - định kỳ'), config.intervalMinutes * 60 * 1000);
-
-  // Auto-Upgrade định kỳ
-  const upgradeInterval = (config.autoUpgradeIntervalHours || 12) * 60 * 60 * 1000;
-  setInterval(antigravityAutoUpgrade, upgradeInterval);
+    if (FEATURES.autoUpgrade) {
+      const upgradeInterval = (config.autoUpgradeIntervalHours || 12) * 60 * 60 * 1000;
+      setInterval(() => {
+        if (FEATURES.autoUpgrade) antigravityAutoUpgrade();
+      }, upgradeInterval);
+    }
+  }
 
   log('INFO', '✅ Bot sẵn sàng!');
 }
 
 // Global error handlers
-process.on('uncaughtException',  async err => { log('ERROR', `💥 UNCAUGHT: ${err.message}`);   await antigravitySelfFix(err.message, 'uncaughtException'); });
-process.on('unhandledRejection', async rsn => { log('ERROR', `💥 UNHANDLED: ${rsn}`);           await antigravitySelfFix(String(rsn), 'unhandledRejection'); });
+process.on('uncaughtException',  async err => {
+  log('ERROR', `💥 UNCAUGHT: ${err.message}`);
+  if (FEATURES.selfHeal) await antigravitySelfFix(err.message, 'uncaughtException');
+});
+process.on('unhandledRejection', async rsn => {
+  log('ERROR', `💥 UNHANDLED: ${rsn}`);
+  if (FEATURES.selfHeal) await antigravitySelfFix(String(rsn), 'unhandledRejection');
+});
 
 main().catch(async err => {
   log('ERROR', `💥 MAIN CRASH: ${err.message}`);

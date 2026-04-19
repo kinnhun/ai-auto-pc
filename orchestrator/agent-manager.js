@@ -20,6 +20,7 @@
 const fs     = require('fs');
 const path   = require('path');
 const axios  = require('axios');
+const Memory = require('./memory');
 
 const ROOT         = path.join(__dirname, '..');
 const AGENTS_FILE  = path.join(__dirname, 'agents.json');
@@ -87,9 +88,11 @@ async function callAgent(taskType, prompt, opts = {}) {
     log(`📞 Gọi ${agent.name} cho task "${taskType}" (attempt ${attempt}/${agents.length})`);
 
     try {
+      const finalPrompt = prompt + Memory.getMemoryContext();
+      
       const resp = await axios.post(AI_ENDPOINT(), {
         model      : agent.model,
-        messages   : [{ role: 'user', content: prompt }],
+        messages   : [{ role: 'user', content: finalPrompt }],
         temperature: opts.temperature ?? agent.temperature,
         max_tokens : opts.maxTokens   ?? agent.maxTokens,
       }, {

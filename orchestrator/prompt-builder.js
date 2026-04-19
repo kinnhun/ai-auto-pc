@@ -152,7 +152,7 @@ function parsePatches(aiText) {
   const patches = [];
 
   // File patches
-  const re = /\[PATCH\s+file="([^"]+)"(?:\s+confidence=(\d+))?\]([\s\S]*?)\[\/PATCH\]/gi;
+  const re = /\[PATCH[\s]+file=["']?([^"'\s\]]+)["']?(?:[\s]+(?:confidence|conf)=["']?(\d+)["']?)?[\s]*\]([\s\S]*?)\[\/PATCH\]/gi;
   let m;
   while ((m = re.exec(aiText)) !== null) {
     const file       = m[1].trim();

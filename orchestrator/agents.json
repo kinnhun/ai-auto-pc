@@ -1,75 +1,140 @@
 {
-  "_comment": "AGENT REGISTRY — Mỗi agent có tên, vai trò và model riêng. Không để 2 agent cùng làm 1 việc.",
+  "_title": "DEV TEAM REGISTRY v2.0 — Full Autonomous Team",
+  "_description": "7 agents chuyên biệt, điều phối qua AgentManager. Không trùng vai trò.",
 
   "agents": {
 
     "SENIOR_DEV": {
       "name"       : "🧠 Senior Dev",
+      "emoji"      : "🧠",
       "model"      : "ag/gemini-3.1-pro-high",
-      "role"       : "Phân tích lỗi, viết patch fix bug",
-      "tasks"      : ["fix_bug", "fix_selector", "fix_telegram"],
+      "role"       : "Phân tích lỗi sâu, viết patch fix bug",
+      "tasks"      : ["fix_bug", "fix_selector", "fix_telegram", "qa_review"],
       "temperature": 0.1,
       "maxTokens"  : 4000,
-      "description": "Chuyên sửa bug. Không viết content. Không upgrade."
+      "canEditFiles": true,
+      "canRunCmds" : false,
+      "description": "Lead engineer. Chịu trách nhiệm chính về code quality."
     },
 
     "CODE_REVIEWER": {
       "name"       : "🔍 Code Reviewer",
+      "emoji"      : "🔍",
       "model"      : "cx/gpt-5.3-codex",
       "role"       : "Review code, đề xuất cải tiến, refactor",
-      "tasks"      : ["upgrade", "add_feature"],
+      "tasks"      : ["upgrade", "add_feature", "code_review"],
       "temperature": 0.2,
       "maxTokens"  : 4000,
-      "description": "Chuyên review và nâng cấp. Không sửa bug runtime."
+      "canEditFiles": true,
+      "canRunCmds" : false,
+      "description": "Code quality gate. Không sửa bug runtime."
     },
 
     "CONTENT_WRITER": {
       "name"       : "✍️ Content Writer",
+      "emoji"      : "✍️",
       "model"      : "ag/gemini-3-flash",
-      "role"       : "Viết bài Facebook chuẩn SEO, chọn chủ đề trending",
-      "tasks"      : ["write_content", "pick_topic"],
+      "role"       : "Viết bài Facebook chuẩn SEO, tạo caption",
+      "tasks"      : ["write_content", "write_caption", "write_hook"],
       "temperature": 0.85,
       "maxTokens"  : 1500,
-      "description": "Chuyên viết content. Không đụng code."
+      "canEditFiles": false,
+      "canRunCmds" : false,
+      "description": "Chuyên content. Không đụng code."
     },
 
     "TREND_ANALYST": {
       "name"       : "📊 Trend Analyst",
+      "emoji"      : "📊",
       "model"      : "ag/gemini-3-flash",
-      "role"       : "Phân tích trending, chọn chủ đề hot nhất",
-      "tasks"      : ["analyze_trend"],
-      "temperature": 0.6,
+      "role"       : "Phân tích trending, chọn chủ đề hot, data insight",
+      "tasks"      : ["analyze_trend", "pick_topic", "summarize_data"],
+      "temperature": 0.5,
       "maxTokens"  : 800,
-      "description": "Chuyên phân tích xu hướng. Output ngắn, có số liệu."
+      "canEditFiles": false,
+      "canRunCmds" : false,
+      "description": "Data analyst. Output ngắn, có số liệu cụ thể."
+    },
+
+    "PC_CONTROLLER": {
+      "name"       : "🖥️ PC Controller",
+      "emoji"      : "🖥️",
+      "model"      : "ag/gemini-3.1-pro-high",
+      "role"       : "Điều khiển máy tính: chụp màn hình, click, gõ phím, chạy app",
+      "tasks"      : ["pc_click", "pc_type", "pc_screenshot", "pc_run_app", "pc_cmd"],
+      "temperature": 0.0,
+      "maxTokens"  : 1000,
+      "canEditFiles": true,
+      "canRunCmds" : true,
+      "description": "Tự động hóa máy tính. Cần approval cho mọi action.",
+      "requireApproval": true
+    },
+
+    "CLAUDE_CODER": {
+      "name"       : "⚡ Claude Coder",
+      "emoji"      : "⚡",
+      "model"      : "claude-cli",
+      "role"       : "Full codebase understanding, autonomous multi-file edits",
+      "tasks"      : ["full_refactor", "multi_file_edit", "analyze_codebase"],
+      "temperature": 0.1,
+      "maxTokens"  : 8000,
+      "canEditFiles": true,
+      "canRunCmds" : true,
+      "description": "Dùng Claude Code CLI. Cần ANTHROPIC_API_KEY.",
+      "requireApproval": true,
+      "installCmd" : "npm install -g @anthropic-ai/claude-code",
+      "checkCmd"   : "claude --version"
     },
 
     "BACKUP_DEV": {
       "name"       : "🔧 Backup Dev",
+      "emoji"      : "🔧",
       "model"      : "cx/gpt-5.3-codex-high",
-      "role"       : "Dự phòng khi Senior Dev không available",
-      "tasks"      : ["fix_bug", "fix_selector"],
-      "temperature": 0.1,
+      "role"       : "Dự phòng khi tất cả fail",
+      "tasks"      : ["fix_bug", "fix_selector", "fix_telegram"],
+      "temperature": 0.15,
       "maxTokens"  : 3000,
-      "description": "Chỉ dùng khi SENIOR_DEV fail. Không chạy song song."
+      "canEditFiles": true,
+      "canRunCmds" : false,
+      "description": "Last resort. Chỉ chạy khi primary + secondary đều fail."
+    },
+
+    "LEARNING_AGENT": {
+      "name"       : "🧠 Memory Agent",
+      "emoji"      : "🧠",
+      "model"      : "ag/gemini-3.1-pro-high",
+      "role"       : "Đọc feedback của user, trích xuất kinh nghiệm và lưu vào memory",
+      "tasks"      : ["extract_insight"],
+      "temperature": 0.3,
+      "maxTokens"  : 500,
+      "canEditFiles": false,
+      "canRunCmds" : false,
+      "description": "Trích xuất insight cốt lõi từ user."
     }
   },
 
   "task_assignment": {
-    "fix_bug"      : ["SENIOR_DEV", "BACKUP_DEV"],
-    "fix_selector" : ["SENIOR_DEV", "BACKUP_DEV"],
-    "fix_telegram" : ["SENIOR_DEV", "BACKUP_DEV"],
-    "upgrade"      : ["CODE_REVIEWER"],
-    "add_feature"  : ["CODE_REVIEWER"],
-    "write_content": ["CONTENT_WRITER"],
-    "pick_topic"   : ["TREND_ANALYST", "CONTENT_WRITER"],
-    "analyze_trend": ["TREND_ANALYST"]
-  },
-
-  "_notes": [
-    "Mỗi task có primary agent và fallback agent",
-    "Không bao giờ gọi 2 agent cùng lúc cho 1 task",
-    "Temperature thấp hơn = code task (fix, review)",
-    "Temperature cao hơn = creative task (content)",
-    "Chỉ SENIOR_DEV và CODE_REVIEWER được phép sửa file"
-  ]
+    "extract_insight"  : ["LEARNING_AGENT", "SENIOR_DEV"],
+    "fix_bug"          : ["SENIOR_DEV", "BACKUP_DEV"],
+    "fix_selector"     : ["SENIOR_DEV", "BACKUP_DEV"],
+    "fix_telegram"     : ["SENIOR_DEV", "BACKUP_DEV"],
+    "upgrade"          : ["CODE_REVIEWER"],
+    "add_feature"      : ["CODE_REVIEWER", "SENIOR_DEV"],
+    "code_review"      : ["CODE_REVIEWER"],
+    "qa_review"        : ["SENIOR_DEV"],
+    "write_content"    : ["CONTENT_WRITER"],
+    "write_caption"    : ["CONTENT_WRITER"],
+    "write_hook"       : ["CONTENT_WRITER"],
+    "analyze_trend"    : ["TREND_ANALYST"],
+    "pick_topic"       : ["TREND_ANALYST", "CONTENT_WRITER"],
+    "summarize_data"   : ["TREND_ANALYST"],
+    "pc_click"         : ["PC_CONTROLLER"],
+    "pc_type"          : ["PC_CONTROLLER"],
+    "pc_screenshot"    : ["PC_CONTROLLER"],
+    "pc_run_app"       : ["PC_CONTROLLER"],
+    "pc_cmd"           : ["PC_CONTROLLER"],
+    "full_refactor"    : ["CLAUDE_CODER"],
+    "multi_file_edit"  : ["CLAUDE_CODER"],
+    "analyze_codebase" : ["CLAUDE_CODER", "SENIOR_DEV"]
+  }
 }
