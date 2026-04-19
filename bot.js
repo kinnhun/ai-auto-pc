@@ -517,7 +517,10 @@ async function createPoster(postContent) {
 
     await nodeHtmlToImage({
       output: posterPath, html,
-      puppeteerArgs: { args: ['--no-sandbox', '--disable-setuid-sandbox'] }
+      puppeteerArgs: {
+        executablePath: findBrowser() || undefined,
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+      }
     });
     log('INFO', `🖼️ Poster: ${posterPath}`);
     return posterPath;
