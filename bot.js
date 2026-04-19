@@ -628,7 +628,7 @@ async function launchBrowser() {
 
   const browser = await puppeteer.launch({
     headless: false,
-    userDataDir: SESSION_DIR,
+    userDataDir: path.join(process.env.LOCALAPPDATA || '', 'Google', 'Chrome', 'User Data'),
     executablePath: execPath,
     args: [
       '--no-sandbox', '--disable-setuid-sandbox',

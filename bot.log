@@ -314,3 +314,122 @@
 [10:23:18 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
 [10:23:18 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
 [10:23:31 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (132 chars)
+[16:50:22 19/4/2026] [INFO] ✅ Agents: 🧠 Senior Dev | 🔍 Code Reviewer | ✍️ Content Writer | 📊 Trend Analyst | 🖥️ PC Controller | ⚡ Claude Coder | 🔧 Backup Dev | 🧠 Memory Agent
+[16:50:24 19/4/2026] [INFO] 👂 Telegram polling ON
+[16:50:24 19/4/2026] [INFO] ⏳ Tạo bài đầu tiên sau 2 phút...
+[16:50:24 19/4/2026] [INFO] ✅ Bot sẵn sàng!
+[16:51:40 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:51:40 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:51:41 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776592300693.png
+[16:51:42 19/4/2026] [PCCtrl] ❌ Screenshot thất bại: Command failed: powershell -Command " Add-Type -AssemblyName System.Windows.Forms Add-Type -AssemblyName System.Drawing $screen = [System.Windows.Forms.Screen]::PrimaryScreen $bitmap = New-Object System.Drawing.Bitmap($screen.Bounds.Width, $screen.Bounds.Height) $g = [System.Drawing.Graphics]::FromImage($bitmap) $g.CopyFromScreen($screen.Bounds.Location, [System.Drawing.Point]::Empty, $screen.Bounds.Size) $bitmap.Save('D:/test ai/ai code/ai code/fb-auto-bot/screenshots/before_task_1776592300817.png') $g.Dispose(); $bitmap.Dispose() "
+Unable to find type [System.Drawing.Point].
+At line:1 char:321
++ ... opyFromScreen($screen.Bounds.Location, 
+[System.Drawing.Point]::Empty, ...
++                                            
+~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (Syste 
+   m.Drawing.Point:TypeName) [], RuntimeException
+    + FullyQualifiedErrorId : TypeNotFound
+ 
+You cannot call a method on a null-valued expression.
+At line:1 char:484
++ ... shots/before_task_1776592300817.png') 
+$g.Dispose(); $bitmap.Dispose()
++                                                      
+   ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [] 
+   , RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+ 
+
+[16:51:42 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:51:42 19/4/2026] [AgentMgr] ❌ 🖥️ PC Controller thất bại: 
+[16:51:42 19/4/2026] [AgentMgr] 🚫 Tất cả agents đều fail cho task: pc_screenshot
+[16:51:44 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:51:44 19/4/2026] [AgentMgr] ❌ 🖥️ PC Controller thất bại: 
+[16:51:44 19/4/2026] [AgentMgr] 🚫 Tất cả agents đều fail cho task: pc_screenshot
+[16:52:24 19/4/2026] [INFO] 📝 Tạo bài mới (auto - lần đầu)...
+[16:52:25 19/4/2026] [INFO] 📡 Thu thập trending...
+[16:52:30 19/4/2026] [INFO] 📊 12 bài trending từ 3 nguồn
+[16:52:30 19/4/2026] [INFO] 🤖 [TREND_ANALYST] Chọn chủ đề hot nhất...
+[16:52:30 19/4/2026] [AgentMgr] 📞 Gọi 📊 Trend Analyst cho task "analyze_trend" (attempt 1/1)
+[16:52:30 19/4/2026] [AgentMgr] ❌ 📊 Trend Analyst thất bại: 
+[16:52:30 19/4/2026] [AgentMgr] 🚫 Tất cả agents đều fail cho task: analyze_trend
+[16:52:30 19/4/2026] [WARN] TREND_ANALYST thất bại, tiếp tục...
+[16:52:30 19/4/2026] [INFO] ✍️ [CONTENT_WRITER] Viết bài chuẩn SEO...
+[16:52:30 19/4/2026] [AgentMgr] 📞 Gọi ✍️ Content Writer cho task "write_content" (attempt 1/1)
+[16:52:30 19/4/2026] [AgentMgr] ❌ ✍️ Content Writer thất bại: 
+[16:52:30 19/4/2026] [AgentMgr] 🚫 Tất cả agents đều fail cho task: write_content
+[16:52:47 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:52:48 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:52:48 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776592368259.png
+[16:52:48 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776592368476.png
+[16:52:51 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:52:53 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:52:59 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (125 chars)
+[16:52:59 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (162 chars)
+[16:53:08 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="""
+[16:53:09 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776592388842.png
+[16:53:11 19/4/2026] [PCCtrl] 🚀 Mở app: chrome
+[16:53:22 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776592401938.png
+[16:53:33 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:53:34 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:53:37 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:53:37 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:53:46 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (104 chars)
+[16:53:49 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (123 chars)
+[16:54:10 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:54:11 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776592451061.png
+[16:54:12 19/4/2026] [INFO] [Router] Matched route: PC_CONTROLLER
+[16:54:13 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_task_1776592452998.png
+[16:54:14 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:54:15 19/4/2026] [AgentMgr] 📞 Gọi 🖥️ PC Controller cho task "pc_screenshot" (attempt 1/1)
+[16:54:18 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (159 chars)
+[16:54:20 19/4/2026] [AgentMgr] ✅ 🖥️ PC Controller hoàn thành (191 chars)
+[16:54:30 19/4/2026] [PCCtrl] 🤖 AI Action: type="openapp" attrs="app="chrome" args="https://facebook.com""
+[16:54:30 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\before_openapp_1776592470721.png
+[16:54:32 19/4/2026] [PCCtrl] 🌐 Mở URL: https://facebook.com [chrome]
+[16:54:36 19/4/2026] [PCCtrl] 📸 Screenshot: D:\test ai\ai code\ai code\fb-auto-bot\screenshots\after_openapp_1776592475848.png
+[16:54:44 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:54:44 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:54:44 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:54:45 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:54:56 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (850 chars)
+[16:54:57 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (331 chars)
+[16:55:52 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:55:53 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:55:56 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:55:56 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:56:06 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (135 chars)
+[16:56:09 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (126 chars)
+[16:56:18 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:56:18 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:56:21 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:56:22 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:56:30 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (438 chars)
+[16:56:34 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (707 chars)
+[16:58:36 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:58:36 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:58:38 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:58:38 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:58:48 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (813 chars)
+[16:58:51 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (686 chars)
+[16:59:54 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:59:55 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[16:59:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[16:59:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[17:00:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (144 chars)
+[17:00:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (145 chars)
+[17:00:53 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[17:00:54 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[17:00:55 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[17:00:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[17:01:06 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (132 chars)
+[17:01:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (630 chars)
+[17:01:54 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[17:01:54 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[17:01:54 19/4/2026] [INFO] [Router] Matched route: SENIOR_DEV
+[17:01:55 19/4/2026] [AgentMgr] 📞 Gọi 🧠 Senior Dev cho task "fix_bug" (attempt 1/2)
+[17:02:06 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (150 chars)
+[17:02:07 19/4/2026] [AgentMgr] ✅ 🧠 Senior Dev hoàn thành (151 chars)
